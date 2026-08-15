@@ -1,0 +1,27 @@
+{% macro score_table(rule_based, show_header=True) %}
+<div>
+  {% if show_header %}
+  <div class="grid grid-cols-[1fr,auto] gap-4 pb-2 mb-1">
+    <span class="eyebrow">Metric</span>
+    <span class="eyebrow">Result</span>
+  </div>
+  {% endif %}
+  <div class="divide-y divide-border">
+    {% for m in rule_based.metrics %}
+    <div class="grid grid-cols-[1fr,auto,auto] items-center gap-4 py-2.5">
+      <span class="text-sm text-ink">{{ m.name }}</span>
+      <span class="text-sm text-ink-soft text-right">{{ m.result }}</span>
+      <span class="status-dot
+        {%- if m.flag == 'warn' %} bg-amber-400
+        {%- elif m.flag == 'neutral' %} bg-accent
+        {%- else %} bg-emerald-400
+        {%- endif %}"></span>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="text-sm text-ink-muted mt-3">
+    Composite confidence:
+    <span class="text-ink font-medium">{{ rule_based.composite_confidence }}% &mdash; {{ rule_based.confidence_label }}</span>
+  </p>
+</div>
+{% endmacro %}

@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Design tokens — pulled straight from the wireframe palette.
+   Change these in one place instead of hunting arbitrary values later. */
+@theme {
+  --color-canvas: #0b0d16;
+  --color-panel: #12141f;
+  --color-panel-2: #171a27;
+  --color-border: #262a3a;
+
+  --color-ink: #f1f2f6;
+  --color-ink-soft: #a8adc0;
+  --color-ink-muted: #6b7086;
+
+  --color-accent: #8b7cf6;
+  --color-accent-soft: #2b2650;
+
+  --color-agree: #34d399;
+  --color-agree-bg: #0c2318;
+  --color-agree-border: #1c4a34;
+
+  --color-diverge: #f5a524;
+  --color-diverge-bg: #2b1c05;
+  --color-diverge-border: #5c3d0a;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas text-ink;
+  }
+}
+
+@layer components {
+  .status-dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full align-middle;
+  }
+
+  .eyebrow {
+    @apply text-xs font-medium tracking-wide uppercase text-ink-muted;
+  }
+
+  .panel {
+    @apply bg-panel border border-border rounded-xl;
+  }
+}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "partials/_status_banner.html" import status_banner %}
+{% from "partials/_layout_switcher.html" import layout_switcher %}
+
+{% block title %}{{ company.name }} — Standing Report (Compact){% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4 mb-6">
+  <a href="{{ url_for('portfolio') }}" class="text-sm text-ink-muted hover:text-ink transition-colors">&larr; Portfolio</a>
+  {{ layout_switcher(company.id, layout) }}
+</div>
+
+<div class="panel p-6 max-w-xl">
+  <div class="flex items-start justify-between gap-4">
+    <h1 class="text-2xl font-semibold text-ink">
+      {{ company.name }} <span class="text-ink-muted text-base font-normal">{{ company.ticker }}</span>
+    </h1>
+    <span class="text-xs text-ink-muted whitespace-nowrap mt-1.5">{{ company.fiscal_year }}</span>
+  </div>
+  <span class="inline-block mt-2 mb-4 px-2.5 py-1 rounded-md border border-accent/40 text-accent text-xs font-medium">
+    {{ company.sector }}
+  </span>
+
+  <div class="mb-4">
+    {{ status_banner(company.agreement) }}
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="rounded-lg bg-panel-2 border border-border p-4">
+      <span class="eyebrow">Rule-Based</span>
+      <p class="text-sm text-ink-soft mt-2 leading-relaxed">
+        {% for m in company.rule_based.metrics[:2] %}{{ m.name }} {{ m.result.split(' ')[0] }}{% if not loop.last %} &middot; {% endif %}{% endfor %}
+      </p>
+      <p class="text-ink font-medium mt-2">{{ company.rule_based.composite_confidence }}% &mdash; {{ company.rule_based.confidence_label }}</p>
+    </div>
+    <div class="rounded-lg bg-panel-2 border border-border p-4">
+      <span class="eyebrow">Trained Model</span>
+      <p class="text-sm text-ink-soft mt-2">Distress probability {{ company.trained_model.distress_probability }}%</p>
+      <p class="text-ink font-medium mt-2">{{ company.trained_model.model_confidence }}% &mdash; {{ company.trained_model.confidence_label }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="rounded-lg bg-panel-2 border border-border p-4">
+      <span class="eyebrow">Valuation</span>
+      <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.valuation_standing }}</p>
+    </div>
+    <div class="rounded-lg bg-panel-2 border border-border p-4">
+      <span class="eyebrow">Risk Factors</span>
+      <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.risk_factors[0] }}</p>
+    </div>
+  </div>
+
+  <div class="rounded-lg bg-panel-2 border border-border p-4">
+    <span class="eyebrow">Conclusion</span>
+    <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.conclusion }}</p>
+  </div>
+</div>
+{% endblock %}

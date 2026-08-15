@@ -1,0 +1,144 @@
+{
+  "companies": [
+    {
+      "id": "mrdn",
+      "name": "Meridian Foods Corp",
+      "ticker": "MRDN",
+      "sector": "Packaged Foods",
+      "fiscal_year": "FY2025",
+      "generated_at": "Jul 31, 2026",
+      "business_overview": "Meridian operates in packaged consumer foods, generating revenue primarily through branded retail distribution. Headquartered in the US, reports under GAAP.",
+      "rule_based": {
+        "composite_confidence": 86,
+        "confidence_label": "High",
+        "metrics": [
+          {"name": "DuPont Breakdown", "result": "ROE 18.2% \u2014 margin-driven", "flag": "good"},
+          {"name": "Piotroski F-Score", "result": "7 / 9", "flag": "good"},
+          {"name": "Altman Z-Score", "result": "3.4 \u2014 Safe zone", "flag": "good"},
+          {"name": "ROIC vs. WACC", "result": "14.1% vs. 8.7% \u2014 value-creating", "flag": "good"},
+          {"name": "Cash Conversion Ratio", "result": "0.92", "flag": "good"}
+        ]
+      },
+      "trained_model": {
+        "distress_probability": 11,
+        "model_confidence": 89,
+        "confidence_label": "High"
+      },
+      "agreement": {
+        "status": "agreement",
+        "gap_points": 3,
+        "explanation": "Rule-based (86%) and trained model (89%) confidence independently converge on a low-risk read. This reinforces the conclusion rather than requiring further investigation.",
+        "next_step": null
+      },
+      "valuation_standing": "EV/EBITDA of 11.2x sits in the top quartile of its peer cluster, suggesting the market already prices in strong fundamentals.",
+      "risk_factors": [
+        "Elevated customer concentration in top retail account",
+        "Input-cost exposure to a single commodity category"
+      ],
+      "conclusion": "Meridian presents a financially sound profile with strong, cash-backed profitability and manageable leverage. Both assessments independently support a high-confidence, low-distress standing \u2014 diligence should focus on customer concentration, not balance-sheet risk."
+    },
+    {
+      "id": "vig",
+      "name": "Vantage Industrial Group",
+      "ticker": "VIG",
+      "sector": "Industrial Machinery",
+      "fiscal_year": "FY2025",
+      "generated_at": "Jul 31, 2026",
+      "business_overview": "Manufactures precision components for industrial equipment OEMs, reporting under GAAP.",
+      "rule_based": {
+        "composite_confidence": 81,
+        "confidence_label": "High",
+        "metrics": [
+          {"name": "Piotroski F-Score", "result": "5 / 9", "flag": "neutral"},
+          {"name": "Altman Z-Score", "result": "2.1 \u2014 Grey", "flag": "warn"}
+        ]
+      },
+      "trained_model": {
+        "distress_probability": 38,
+        "model_confidence": 47,
+        "confidence_label": "Medium-Low"
+      },
+      "agreement": {
+        "status": "divergence",
+        "gap_points": 34,
+        "explanation": "Divergence driven by elevated Debt/EBITDA interacting with declining asset turnover \u2014 a nonlinear pattern the classical Z-Score weights less heavily than the trained model.",
+        "next_step": "Review leverage trend and refinancing schedule before relying on the rule-based score alone."
+      },
+      "valuation_standing": "EV/EBITDA of 7.4x sits below its peer median, consistent with the market pricing in elevated leverage risk.",
+      "risk_factors": [
+        "Rising Debt/EBITDA against a declining asset turnover trend",
+        "Refinancing schedule concentrated within the next 18 months"
+      ],
+      "conclusion": "The two methods disagree meaningfully on distress risk. Analyst review is recommended before this standing is relied on for diligence."
+    },
+    {
+      "id": "crsr",
+      "name": "Corsair Logistics",
+      "ticker": "CRSR",
+      "sector": "Freight & Logistics",
+      "fiscal_year": "FY2025",
+      "generated_at": "Jul 31, 2026",
+      "business_overview": "Provides third-party freight brokerage and warehousing across North America, reporting under GAAP.",
+      "rule_based": {
+        "composite_confidence": 74,
+        "confidence_label": "Med-High",
+        "metrics": [
+          {"name": "Piotroski F-Score", "result": "6 / 9", "flag": "good"},
+          {"name": "Altman Z-Score", "result": "2.9 \u2014 Grey-Safe", "flag": "neutral"},
+          {"name": "Cash Conversion Ratio", "result": "1.05", "flag": "good"}
+        ]
+      },
+      "trained_model": {
+        "distress_probability": 19,
+        "model_confidence": 71,
+        "confidence_label": "Med-High"
+      },
+      "agreement": {
+        "status": "agreement",
+        "gap_points": 3,
+        "explanation": "Rule-based (74%) and trained model (71%) confidence independently converge on a moderate-low risk read.",
+        "next_step": null
+      },
+      "valuation_standing": "EV/EBITDA of 8.1x is in line with the freight-brokerage peer median.",
+      "risk_factors": [
+        "Exposure to freight rate cyclicality",
+        "Thin margins typical of the brokerage model"
+      ],
+      "conclusion": "Corsair's standing is consistent across both methods \u2014 moderate risk, no immediate red flags."
+    },
+    {
+      "id": "hldm",
+      "name": "Halden Materials",
+      "ticker": "HLDM",
+      "sector": "Building Materials",
+      "fiscal_year": "FY2025",
+      "generated_at": "Jul 31, 2026",
+      "business_overview": "Produces aggregate and cement products for regional construction markets, reporting under GAAP.",
+      "rule_based": {
+        "composite_confidence": 63,
+        "confidence_label": "Medium",
+        "metrics": [
+          {"name": "Piotroski F-Score", "result": "4 / 9", "flag": "warn"},
+          {"name": "Altman Z-Score", "result": "1.8 \u2014 Grey", "flag": "warn"}
+        ]
+      },
+      "trained_model": {
+        "distress_probability": 41,
+        "model_confidence": 58,
+        "confidence_label": "Medium"
+      },
+      "agreement": {
+        "status": "divergence",
+        "gap_points": 5,
+        "explanation": "Both methods land in a similar medium-confidence band, but disagree slightly on the primary driver of risk.",
+        "next_step": "Confirm recent capex financing terms before finalizing the standing."
+      },
+      "valuation_standing": "EV/EBITDA of 6.0x trails peers, reflecting exposure to regional construction demand.",
+      "risk_factors": [
+        "Cyclical exposure to regional construction spend",
+        "Recent debt-financed capex increasing leverage"
+      ],
+      "conclusion": "Halden's standing is uncertain enough that both signals warrant a closer analyst pass before diligence proceeds."
+    }
+  ]
+}

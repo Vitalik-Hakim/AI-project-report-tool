@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Standing Reports{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="min-h-screen bg-canvas text-ink">
+  <header class="border-b border-border">
+    <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="{{ url_for('portfolio') }}" class="text-lg font-semibold text-ink">Standing Reports</a>
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="{{ url_for('portfolio') }}" class="text-accent hover:text-ink transition-colors">Portfolio</a>
+        <a href="#" class="text-ink-soft hover:text-ink transition-colors">Methodology</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-8">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

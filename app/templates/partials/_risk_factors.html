@@ -1,0 +1,10 @@
+{% macro risk_factors(items) %}
+<ul class="space-y-2">
+  {% for item in items %}
+  <li class="flex gap-2 text-sm text-ink-soft leading-relaxed">
+    <span class="text-ink-muted">&bull;</span>
+    <span>{{ item }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}

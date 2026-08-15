@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% from "partials/_status_banner.html" import status_banner %}
+{% from "partials/_score_table.html" import score_table %}
+{% from "partials/_risk_factors.html" import risk_factors %}
+{% from "partials/_layout_switcher.html" import layout_switcher %}
+
+{% block title %}{{ company.name }} — Standing Report (Sidebar){% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4 mb-6">
+  <a href="{{ url_for('portfolio') }}" class="text-sm text-ink-muted hover:text-ink transition-colors">&larr; Portfolio</a>
+  {{ layout_switcher(company.id, layout) }}
+</div>
+
+<div class="panel overflow-hidden grid grid-cols-1 md:grid-cols-[200px,1fr]">
+  <aside class="border-b md:border-b-0 md:border-r border-border p-5">
+    <p class="text-ink font-medium mb-4">{{ company.name.split(' ')[0] }} {{ company.name.split(' ')[1][:3] }}.</p>
+    <nav class="flex flex-col gap-3 text-sm">
+      <a href="#overview" class="text-ink-soft hover:text-accent transition-colors underline underline-offset-4 decoration-border">Overview</a>
+      <a href="#scores" class="text-ink-soft hover:text-accent transition-colors underline underline-offset-4 decoration-border">Scores</a>
+      <a href="#agreement" class="text-ink-soft hover:text-accent transition-colors underline underline-offset-4 decoration-border">Agreement</a>
+      <a href="#risks" class="text-ink-soft hover:text-accent transition-colors underline underline-offset-4 decoration-border">Risks</a>
+      <a href="#conclusion" class="text-ink-soft hover:text-accent transition-colors underline underline-offset-4 decoration-border">Conclusion</a>
+    </nav>
+  </aside>
+
+  <div id="agreement" class="scroll-mt-6">
+    {{ status_banner(company.agreement) }}
+  </div>
+
+  <div class="p-6">
+    <section id="overview" class="scroll-mt-6 mb-6">
+      <h1 class="text-2xl font-semibold text-ink">
+        {{ company.name }} <span class="text-ink-muted text-base font-normal">{{ company.ticker }}</span>
+      </h1>
+      <span class="inline-block mt-2 mb-3 px-2.5 py-1 rounded-md border border-accent/40 text-accent text-xs font-medium">
+        {{ company.sector }}
+      </span>
+      <p class="text-ink-soft leading-relaxed">{{ company.business_overview }}</p>
+    </section>
+
+    <section id="scores" class="scroll-mt-6 mb-6">
+      <span class="eyebrow">Scores</span>
+      <div class="mt-2 grid grid-cols-2 gap-x-6 text-sm text-ink-muted mb-2">
+        <span>Rule-based confidence: <span class="text-ink font-medium">{{ company.rule_based.composite_confidence }}% &mdash; {{ company.rule_based.confidence_label }}</span></span>
+        <span>Model confidence: <span class="text-ink font-medium">{{ company.trained_model.model_confidence }}% &mdash; {{ company.trained_model.confidence_label }}</span></span>
+      </div>
+      {{ score_table(company.rule_based, show_header=False) }}
+    </section>
+
+    <section id="risks" class="scroll-mt-6 mb-6">
+      <span class="eyebrow">Risks</span>
+      <div class="mt-2">{{ risk_factors(company.risk_factors) }}</div>
+    </section>
+
+    <section id="conclusion" class="scroll-mt-6">
+      <span class="eyebrow">Conclusion</span>
+      <p class="text-ink-soft leading-relaxed mt-2">{{ company.conclusion }}</p>
+    </section>
+  </div>
+</div>
+{% endblock %}

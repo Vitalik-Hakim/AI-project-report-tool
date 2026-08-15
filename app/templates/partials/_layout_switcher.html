@@ -1,0 +1,12 @@
+{% macro layout_switcher(company_id, current) %}
+<div class="inline-flex items-center gap-1 p-1 rounded-lg bg-panel border border-border text-sm">
+  {% for key, label in [('linear', 'Linear'), ('compact', 'Compact'), ('sidebar', 'Sidebar')] %}
+  <a href="{{ url_for('report', company_id=company_id, layout=key) }}"
+     class="px-3 py-1.5 rounded-md transition-colors
+       {%- if current == key %} bg-accent-soft text-accent
+       {%- else %} text-ink-muted hover:text-ink {%- endif %}">
+    {{ label }}
+  </a>
+  {% endfor %}
+</div>
+{% endmacro %}

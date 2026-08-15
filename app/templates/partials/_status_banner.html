@@ -1,0 +1,24 @@
+{% macro status_banner(agreement) %}
+{% if agreement.status == 'agreement' %}
+<div class="rounded-xl border border-agree-border bg-agree-bg p-4">
+  <p class="flex items-center gap-2 text-emerald-400 font-medium">
+    <span class="status-dot bg-emerald-400"></span>
+    Agreement &mdash; {{ agreement.gap_points }}-point gap
+  </p>
+  <p class="text-ink-soft text-sm mt-1.5 leading-relaxed">{{ agreement.explanation }}</p>
+</div>
+{% else %}
+<div class="rounded-xl border border-diverge-border bg-diverge-bg p-4">
+  <p class="flex items-center gap-2 text-amber-400 font-medium">
+    <span class="status-dot bg-amber-400"></span>
+    Divergence &mdash; {{ agreement.gap_points }}-point gap. Analyst review recommended.
+  </p>
+  <p class="text-ink-soft text-sm mt-1.5 leading-relaxed">{{ agreement.explanation }}</p>
+  {% if agreement.next_step %}
+  <p class="text-ink-soft text-sm mt-1.5 leading-relaxed">
+    <span class="text-ink font-medium">Next step:</span> {{ agreement.next_step }}
+  </p>
+  {% endif %}
+</div>
+{% endif %}
+{% endmacro %}

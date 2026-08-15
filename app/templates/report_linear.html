@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "partials/_status_banner.html" import status_banner %}
+{% from "partials/_score_table.html" import score_table %}
+{% from "partials/_risk_factors.html" import risk_factors %}
+{% from "partials/_layout_switcher.html" import layout_switcher %}
+
+{% block title %}{{ company.name }} — Standing Report{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between gap-4 mb-6">
+  <a href="{{ url_for('portfolio') }}" class="text-sm text-ink-muted hover:text-ink transition-colors">&larr; Portfolio</a>
+  {{ layout_switcher(company.id, layout) }}
+</div>
+
+<div class="flex items-start justify-between gap-4 mb-1">
+  <h1 class="text-3xl font-semibold text-ink">
+    {{ company.name }} <span class="text-ink-muted font-normal">({{ company.ticker }})</span>
+  </h1>
+  <span class="text-sm text-ink-muted whitespace-nowrap mt-2">Generated {{ company.generated_at }} &middot; {{ company.fiscal_year }}</span>
+</div>
+<span class="inline-block mt-2 mb-6 px-2.5 py-1 rounded-md border border-accent/40 text-accent text-xs font-medium">
+  {{ company.sector }}
+</span>
+
+<section class="mb-8">
+  <span class="eyebrow">Business Overview</span>
+  <p class="text-ink-soft leading-relaxed mt-2">{{ company.business_overview }}</p>
+</section>
+
+<div class="grid grid-cols-1 md:grid-cols-[1fr,320px] gap-4 mb-6">
+  <div class="panel p-5">
+    <span class="eyebrow">Rule-Based Scoring</span>
+    <div class="mt-3">{{ score_table(company.rule_based) }}</div>
+  </div>
+  <div class="panel p-5">
+    <span class="eyebrow">Trained Model</span>
+    <p class="text-sm text-ink-muted mt-4">Distress probability</p>
+    <p class="text-3xl font-semibold text-ink mt-1">{{ company.trained_model.distress_probability }}%</p>
+    <p class="text-sm text-ink-muted mt-5">Model confidence</p>
+    <p class="text-ink font-medium mt-1">{{ company.trained_model.model_confidence }}% &mdash; {{ company.trained_model.confidence_label }}</p>
+  </div>
+</div>
+
+<div class="mb-6">
+  {{ status_banner(company.agreement) }}
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="panel p-5">
+    <span class="eyebrow">Valuation Standing</span>
+    <p class="text-sm text-ink-soft leading-relaxed mt-2">{{ company.valuation_standing }}</p>
+  </div>
+  <div class="panel p-5">
+    <span class="eyebrow">Key Risk Factors</span>
+    <div class="mt-2">{{ risk_factors(company.risk_factors) }}</div>
+  </div>
+</div>
+
+<div class="panel p-5">
+  <span class="eyebrow">Overall Conclusion</span>
+  <p class="text-sm text-ink-soft leading-relaxed mt-2">{{ company.conclusion }}</p>
+</div>
+{% endblock %}

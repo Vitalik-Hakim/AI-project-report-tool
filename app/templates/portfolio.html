@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "partials/_badges.html" import confidence_badge, status_pill %}
+
+{% block title %}Standing Reports — Portfolio{% endblock %}
+
+{% block content %}
+<div class="panel overflow-hidden">
+  <div class="px-6 py-4 border-b border-border">
+    <span class="eyebrow">Portfolio Screen</span>
+  </div>
+  <div class="divide-y divide-border">
+    {% for c in companies %}
+    <a href="{{ url_for('report', company_id=c.id) }}"
+       class="flex items-center justify-between gap-4 px-6 py-4 hover:bg-panel-2 transition-colors">
+      <div>
+        <span class="text-ink font-medium">{{ c.name }}</span>
+        <span class="text-ink-muted text-sm ml-2">{{ c.ticker }} &middot; {{ c.sector }}</span>
+      </div>
+      <div class="flex items-center gap-4 shrink-0">
+        {{ confidence_badge(c.rule_based.composite_confidence, c.rule_based.confidence_label) }}
+        {{ status_pill(c.agreement.status) }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
