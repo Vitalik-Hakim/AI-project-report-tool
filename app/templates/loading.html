@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Running Analysis for {{ ticker }} — Standing Reports{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto my-12 text-center p-8 panel">
+  <div id="loader-view">
+    <!-- Spinning animation -->
+    <div class="relative w-16 h-16 mx-auto mb-6">
+      <div class="absolute inset-0 rounded-full border-4 border-accent/20"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-b-agree/40 border-t-transparent border-r-transparent border-l-transparent animate-[spin_3s_linear_infinite]"></div>
+    </div>
+    
+    <h2 class="text-xl font-semibold text-ink mb-2">Analyzing Ticker {{ ticker }}</h2>
+    <p id="status-text" class="text-sm text-ink-soft mb-6 transition-all duration-300">Retrieving financial statements from yfinance...</p>
+    
+    <div class="w-full bg-border rounded-full h-1.5 overflow-hidden">
+      <div id="progress-bar" class="bg-accent h-1.5 w-[15%] transition-all duration-1000 ease-out"></div>
+    </div>
+  </div>
+
+  <div id="error-view" class="hidden">
+    <div class="w-12 h-12 rounded-full bg-red-950/50 border border-red-800 text-red-400 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+      !
+    </div>
+    <h2 class="text-xl font-semibold text-ink mb-2">Analysis Failed</h2>
+    <p id="error-text" class="text-sm text-ink-soft mb-6 leading-relaxed">Could not download data or execute the AI model for this ticker.</p>
+    <a href="{{ url_for('portfolio') }}" class="inline-block px-5 py-2.5 rounded-lg bg-panel-2 hover:bg-border border border-border text-ink text-sm font-medium transition-all">
+      &larr; Return to Portfolio
+    </a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const ticker = "{{ ticker }}";
+    const statusText = document.getElementById("status-text");
+    const progressBar = document.getElementById("progress-bar");
+    const loaderView = document.getElementById("loader-view");
+    const errorView = document.getElementById("error-view");
+    const errorText = document.getElementById("error-text");
+
+    const statusSteps = [
+      { pct: 20, text: "Retrieving balance sheets from Yahoo Finance..." },
+      { pct: 45, text: "Calculating Altman Z-Score and Piotroski F-Score..." },
+      { pct: 60, text: "Evaluating Beneish earnings manipulation indices..." },
+      { pct: 80, text: "Drafting financial brief via Mistral AI..." },
+      { pct: 95, text: "Mapping signals and final database write..." }
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      if (currentStep < statusSteps.length - 1) {
+        currentStep++;
+        progressBar.style.width = statusSteps[currentStep].pct + "%";
+        statusText.textContent = statusSteps[currentStep].text;
+      }
+    }, 2200);
+
+    // Call the analysis API
+    fetch(`/api/analyze/${ticker}`)
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => { throw new Error(err.message || 'Server error occurred'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        clearInterval(interval);
+        progressBar.style.width = "100%";
+        statusText.textContent = "Analysis complete! Redirecting...";
+        setTimeout(() => {
+          window.location.href = `/report/${data.company_id}?layout=linear`;
+        }, 500);
+      })
+      .catch(error => {
+        clearInterval(interval);
+        loaderView.classList.add("hidden");
+        errorView.classList.remove("hidden");
+        errorText.textContent = error.message || "An unexpected error occurred during the financial calculations.";
+      });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% macro altman_panel(raw_altman) %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">Altman Z-Score Classification</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_altman.classification | default('N/A') }}
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">Score Value</span>
+      <p class="text-3xl font-extrabold text-accent mt-0.5">
+        {{ "%.2f"|format(raw_altman.z_score) if raw_altman.z_score is defined else 'N/A' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-2 text-center text-xs font-semibold py-2">
+    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Distress Zone' %}bg-red-950/40 border border-red-800 text-red-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+      <p>Distress Zone</p>
+      <p class="mt-0.5 text-xxs font-normal">&lt; 1.81</p>
+    </div>
+    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Grey Zone' %}bg-amber-950/40 border border-amber-800 text-amber-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+      <p>Grey Zone</p>
+      <p class="mt-0.5 text-xxs font-normal">1.81 – 2.99</p>
+    </div>
+    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Safe Zone' %}bg-emerald-950/40 border border-emerald-800 text-emerald-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+      <p>Safe Zone</p>
+      <p class="mt-0.5 text-xxs font-normal">&gt; 2.99</p>
+    </div>
+  </div>
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft">
+    <p class="font-medium text-ink mb-1">Data Quality & Alignment</p>
+    <p class="leading-relaxed">{{ raw_altman.data_note | default('Complete data was available for analysis year.') }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% macro piotroski_panel(raw_piotroski) %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">Financial Strength Rating</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_piotroski.classification | default('N/A') }}
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">F-Score</span>
+      <p class="text-3xl font-extrabold text-accent mt-0.5">
+        {{ raw_piotroski.score | default(0) }} <span class="text-lg font-normal text-ink-muted">/ 9</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="divide-y divide-border">
+    {% set labels = {
+      'positive_net_income': 'Positive Net Income (Profitability)',
+      'positive_operating_cash_flow': 'Positive Cash Flow from Operations',
+      'improving_roa': 'Improving Return on Assets (ROA)',
+      'cash_flow_greater_than_net_income': 'Operating Cash Flow > Net Income (Quality)',
+      'lower_leverage': 'Lower Leverage (Long-Term Debt Ratio)',
+      'improving_current_ratio': 'Improving Current Ratio (Liquidity)',
+      'no_new_shares': 'No New Shares Issued (Non-Dilution)',
+      'improving_gross_margin': 'Improving Gross Margin (Profit Margin)',
+      'improving_asset_turnover': 'Improving Asset Turnover (Efficiency)'
+    } %}
+    
+    {% for key, label in labels.items() %}
+    {% set passed = raw_piotroski.signals[key] | default(0) == 1 %}
+    <div class="flex items-center justify-between py-2 text-sm">
+      <span class="{% if passed %}text-ink{% else %}text-ink-muted line-through{% endif %}">{{ label }}</span>
+      <span class="flex items-center justify-center w-5 h-5 rounded-full {% if passed %}bg-emerald-950 text-emerald-400 border border-emerald-800{% else %}bg-red-950 text-red-400 border border-red-800{% endif %} font-mono text-xs font-bold">
+        {% if passed %}✓{% else %}✗{% endif %}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft mt-2">
+    <p class="font-medium text-ink mb-1">Piotroski Alignment Note</p>
+    <p class="leading-relaxed">{{ raw_piotroski.data_note | default('Calculated relative to prior year statements.') }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% macro beneish_panel(raw_beneish) %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">Earnings Quality Interpretation</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_beneish.interpretation | default('N/A') }}
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">M-Score</span>
+      <p class="text-3xl font-extrabold text-accent mt-0.5">
+        {{ "%.2f"|format(raw_beneish.score) if raw_beneish.score is defined else 'N/A' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-panel-2 border border-border p-3 rounded-lg flex items-center justify-between text-xs">
+    <span class="text-ink-soft">Risk Threshold:</span>
+    <span class="font-semibold text-ink">&gt; -1.78 suggests potential manipulation</span>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mt-2">
+    {% set items = [
+      ('DSRI', 'Days Sales Rec. Index', '&gt; 1.0 indicates risk', raw_beneish.indices.DSRI),
+      ('GMI', 'Gross Margin Index', '&gt; 1.0 indicates margin decay', raw_beneish.indices.GMI),
+      ('AQI', 'Asset Quality Index', '&gt; 1.0 indicates asset risk', raw_beneish.indices.AQI),
+      ('SGI', 'Sales Growth Index', '&gt; 1.0 indicates growth pressure', raw_beneish.indices.SGI),
+      ('DEPI', 'Depreciation Index', '&gt; 1.0 indicates slower depreciation', raw_beneish.indices.DEPI),
+      ('SGAI', 'SGA Efficiency Index', '&gt; 1.0 indicates efficiency loss', raw_beneish.indices.SGAI),
+      ('LVGI', 'Leverage Index', '&gt; 1.0 indicates debt expansion', raw_beneish.indices.LVGI),
+      ('TATA', 'Accruals to Assets', '&gt; 0.0 indicates accrual earnings', raw_beneish.indices.TATA)
+    ] %}
+    
+    {% for key, name, rule, value in items %}
+    <div class="p-3 bg-panel border border-border rounded-lg flex flex-col justify-between">
+      <div>
+        <span class="eyebrow text-xxs font-semibold">{{ key }} — {{ name }}</span>
+        <p class="text-xxs text-ink-muted mt-0.5">{{ rule }}</p>
+      </div>
+      <p class="text-lg font-bold text-ink mt-2">
+        {{ "%.3f"|format(value) if value is defined and value is not none else 'N/A' }}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft">
+    <p class="font-medium text-ink mb-1">Beneish Model Reference</p>
+    <p class="leading-relaxed">{{ raw_beneish.data_note | default('Analysis of year-over-year balance sheet accruals.') }}</p>
+  </div>
+</div>
+{% endmacro %}

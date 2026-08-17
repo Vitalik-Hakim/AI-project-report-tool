@@ -27,33 +27,51 @@
 
   <div class="grid grid-cols-2 gap-3 mb-3">
     <div class="rounded-lg bg-panel-2 border border-border p-4">
-      <span class="eyebrow">Rule-Based</span>
-      <p class="text-sm text-ink-soft mt-2 leading-relaxed">
-        {% for m in company.rule_based.metrics[:2] %}{{ m.name }} {{ m.result.split(' ')[0] }}{% if not loop.last %} &middot; {% endif %}{% endfor %}
+      <span class="eyebrow text-xxs">Rule-Based Summary</span>
+      <p class="text-xs text-ink-soft mt-1 leading-relaxed">
+        {% for m in company.rule_based.metrics %}
+          {{ m.name.split(' ')[0] }}: {{ m.result.split(' ')[0] }}{% if not loop.last %} &middot; {% endif %}
+        {% endfor %}
       </p>
-      <p class="text-ink font-medium mt-2">{{ company.rule_based.composite_confidence }}% &mdash; {{ company.rule_based.confidence_label }}</p>
+      <p class="text-ink text-sm font-semibold mt-2">{{ company.rule_based.composite_confidence }}% &mdash; {{ company.rule_based.confidence_label }}</p>
     </div>
     <div class="rounded-lg bg-panel-2 border border-border p-4">
-      <span class="eyebrow">Trained Model</span>
-      <p class="text-sm text-ink-soft mt-2">Distress probability {{ company.trained_model.distress_probability }}%</p>
-      <p class="text-ink font-medium mt-2">{{ company.trained_model.model_confidence }}% &mdash; {{ company.trained_model.confidence_label }}</p>
+      <span class="eyebrow text-xxs">Trained ML Model</span>
+      <p class="text-xs text-ink-soft mt-1">Distress probability: {{ company.trained_model.distress_probability }}%</p>
+      <p class="text-ink text-sm font-semibold mt-2">{{ company.trained_model.model_confidence }}% &mdash; {{ company.trained_model.confidence_label }}</p>
     </div>
   </div>
 
   <div class="grid grid-cols-2 gap-3 mb-3">
     <div class="rounded-lg bg-panel-2 border border-border p-4">
-      <span class="eyebrow">Valuation</span>
-      <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.valuation_standing }}</p>
+      <span class="eyebrow text-xxs">Valuation Multiples</span>
+      <p class="text-xs text-ink-soft mt-1 leading-relaxed line-clamp-3">{{ company.valuation_standing }}</p>
     </div>
     <div class="rounded-lg bg-panel-2 border border-border p-4">
-      <span class="eyebrow">Risk Factors</span>
-      <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.risk_factors[0] }}</p>
+      <span class="eyebrow text-xxs">Key Risk Signals</span>
+      <p class="text-xs text-ink-soft mt-1 leading-relaxed line-clamp-3">
+        {% for r in company.risk_factors %}
+          &bull; {{ r }}{% if not loop.last %}<br/>{% endif %}
+        {% endfor %}
+      </p>
     </div>
   </div>
 
   <div class="rounded-lg bg-panel-2 border border-border p-4">
-    <span class="eyebrow">Conclusion</span>
-    <p class="text-sm text-ink-soft mt-2 leading-relaxed">{{ company.conclusion }}</p>
+    <span class="eyebrow text-xxs">AI Standing Conclusion</span>
+    {% if company.llm_report_paragraphs %}
+      <p class="text-xs text-ink-soft mt-1 leading-relaxed">{{ company.llm_report_paragraphs[0] }}</p>
+      <details class="mt-3 text-xs text-accent">
+        <summary class="cursor-pointer hover:underline focus:outline-none font-medium">Read Full AI Report Brief</summary>
+        <div class="mt-2 text-ink-soft space-y-2 border-t border-border pt-2 text-xs leading-relaxed">
+          {% for p in company.llm_report_paragraphs[1:] %}
+          <p>{{ p }}</p>
+          {% endfor %}
+        </div>
+      </details>
+    {% else %}
+      <p class="text-xs text-ink-soft mt-1 leading-relaxed">{{ company.conclusion }}</p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

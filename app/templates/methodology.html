@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Methodology — Standing Reports{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-10 py-4">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-3xl font-extrabold text-ink tracking-tight">Methodology and Model Architecture</h1>
+    <p class="text-ink-soft text-sm mt-2 leading-relaxed">
+      Detailed technical description of our hybrid analysis engine, combining classical deterministic financial formulas with calibrated statistical classifiers and LLM generative briefs.
+    </p>
+  </div>
+
+  <!-- Section 1: The Machine Learning Classifier -->
+  <section class="panel p-6 space-y-4">
+    <span class="eyebrow text-accent font-semibold">1. Machine Learning Distress Classifier</span>
+    <h2 class="text-xl font-bold text-ink">Random Forest Training and Calibration</h2>
+    <p class="text-sm text-ink-soft leading-relaxed">
+      Our predictive model is a <strong>Calibrated Random Forest Classifier</strong> trained on the <code>american_bankruptcy.csv</code> dataset. This historical corpus contains thousands of corporate years of US public company filings, mapping bankruptcies against healthy operating baselines.
+    </p>
+    <div class="bg-panel-2 border border-border p-4 rounded-lg text-sm text-ink-soft space-y-2">
+      <p class="font-semibold text-ink">Model Specifications:</p>
+      <ul class="list-disc list-inside space-y-1 text-xs">
+        <li><strong>Dataset</strong>: American Bankruptcy dataset (~11,000 corporate records).</li>
+        <li><strong>Classifier</strong>: Random Forest ensemble calibrated via sigmoid/isotonic regression to output true probability metrics (rather than uncalibrated vote percentages).</li>
+        <li><strong>Output</strong>: Calculated probability of financial insolvency/distress within the next 12-24 months.</li>
+      </ul>
+    </div>
+    
+    <div class="mt-4">
+      <span class="text-xs font-semibold eyebrow">Input Features (X1 - X18)</span>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xxs text-ink-muted mt-2">
+        <div><strong>X1</strong>: Current Assets</div>
+        <div><strong>X2</strong>: Cost of Goods Sold</div>
+        <div><strong>X3</strong>: Depr. & Amortization</div>
+        <div><strong>X4</strong>: EBITDA</div>
+        <div><strong>X5</strong>: Inventory</div>
+        <div><strong>X6</strong>: Net Income</div>
+        <div><strong>X7</strong>: Total Receivables</div>
+        <div><strong>X8</strong>: Market Value</div>
+        <div><strong>X9</strong>: Net Sales</div>
+        <div><strong>X10</strong>: Total Assets</div>
+        <div><strong>X11</strong>: Total Long-term Debt</div>
+        <div><strong>X12</strong>: EBIT</div>
+        <div><strong>X13</strong>: Gross Profit</div>
+        <div><strong>X14</strong>: Total Current Liabilities</div>
+        <div><strong>X15</strong>: Retained Earnings</div>
+        <div><strong>X16</strong>: Total Revenue</div>
+        <div><strong>X17</strong>: Total Liabilities</div>
+        <div><strong>X18</strong>: Total Operating Expenses</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Deterministic Rule-Based Models -->
+  <section class="panel p-6 space-y-6">
+    <span class="eyebrow text-accent font-semibold">2. Classical Rule-Based Models</span>
+    
+    <!-- Altman Z-Score -->
+    <div class="space-y-3">
+      <h3 class="text-lg font-bold text-ink">Altman Z-Score (Insolvency Screening)</h3>
+      <p class="text-sm text-ink-soft leading-relaxed">
+        Developed by Edward Altman in 1968, this linear combination model evaluates five financial ratios to assess bankruptcy risk:
+      </p>
+      <div class="bg-panel-2 border border-border p-3.5 rounded-lg text-center font-mono text-sm text-accent my-2">
+        Z = 1.2 &middot; X₁ + 1.4 &middot; X₂ + 3.3 &middot; X₃ + 0.6 &middot; X₄ + 1.0 &middot; X₅
+      </div>
+      <div class="text-xs text-ink-soft space-y-1 pl-4 list-decimal list-inside">
+        <div><strong>X₁</strong> = Working Capital / Total Assets &mdash; measures short-term liquidity.</div>
+        <div><strong>X₂</strong> = Retained Earnings / Total Assets &mdash; measures cumulative profitability.</div>
+        <div><strong>X₃</strong> = EBIT / Total Assets &mdash; measures productivity of assets.</div>
+        <div><strong>X₄</strong> = Market Value of Equity / Total Liabilities &mdash; measures financial leverage.</div>
+        <div><strong>X₅</strong> = Net Sales / Total Assets &mdash; measures asset turnover.</div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center text-xxs font-semibold mt-3">
+        <div class="bg-panel-2/50 border border-border p-2 rounded-md">
+          <p class="text-red-400">Distress Zone</p>
+          <p class="text-ink-muted mt-0.5">&lt; 1.81</p>
+        </div>
+        <div class="bg-panel-2/50 border border-border p-2 rounded-md">
+          <p class="text-amber-400">Grey Zone</p>
+          <p class="text-ink-muted mt-0.5">1.81 – 2.99</p>
+        </div>
+        <div class="bg-panel-2/50 border border-border p-2 rounded-md">
+          <p class="text-emerald-400">Safe Zone</p>
+          <p class="text-ink-muted mt-0.5">&gt; 2.99</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Piotroski F-Score -->
+    <div class="border-t border-border pt-6 space-y-3">
+      <h3 class="text-lg font-bold text-ink">Piotroski F-Score (Fundamental Trends)</h3>
+      <p class="text-sm text-ink-soft leading-relaxed">
+        Developed by Joseph Piotroski in 2000, this 9-point checklist measures operational improvement and financial stability trends across three pillars:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-ink-soft mt-3">
+        <div class="bg-panel-2/30 border border-border p-3.5 rounded-lg">
+          <p class="font-semibold text-ink border-b border-border pb-1.5 mb-2">Profitability (4 pts)</p>
+          <ul class="space-y-1 list-disc list-inside text-xxs">
+            <li>Positive Net Income</li>
+            <li>Positive Cash Flow (CFO)</li>
+            <li>Improving Asset Return (ROA)</li>
+            <li>CFO &gt; Net Income</li>
+          </ul>
+        </div>
+        <div class="bg-panel-2/30 border border-border p-3.5 rounded-lg">
+          <p class="font-semibold text-ink border-b border-border pb-1.5 mb-2">Leverage / Liquidity (3 pts)</p>
+          <ul class="space-y-1 list-disc list-inside text-xxs">
+            <li>Decreasing Long-Term Debt</li>
+            <li>Improving Current Ratio</li>
+            <li>No New Shares Issued</li>
+          </ul>
+        </div>
+        <div class="bg-panel-2/30 border border-border p-3.5 rounded-lg">
+          <p class="font-semibold text-ink border-b border-border pb-1.5 mb-2">Efficiency (2 pts)</p>
+          <ul class="space-y-1 list-disc list-inside text-xxs">
+            <li>Improving Gross Margin</li>
+            <li>Improving Asset Turnover</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beneish M-Score -->
+    <div class="border-t border-border pt-6 space-y-3">
+      <h3 class="text-lg font-bold text-ink">Beneish M-Score (Earnings Quality)</h3>
+      <p class="text-sm text-ink-soft leading-relaxed">
+        Developed by Messod Beneish in 1999, this model uses 8 key ratios to detect whether a company is likely manipulating its earnings:
+      </p>
+      <div class="bg-panel-2 border border-border p-3.5 rounded-lg text-center font-mono text-xs text-accent leading-relaxed my-2">
+        M = -4.84 + 0.920 &middot; DSRI + 0.528 &middot; GMI + 0.404 &middot; AQI + 0.892 &middot; SGI<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;+ 0.115 &middot; DEPI - 0.172 &middot; SGAI + 4.679 &middot; TATA - 0.327 &middot; LVGI
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-xs text-ink-soft">
+        <div class="space-y-1">
+          <div><strong>DSRI</strong>: Days Sales in Receivables Index</div>
+          <div><strong>GMI</strong>: Gross Margin Index</div>
+          <div><strong>AQI</strong>: Asset Quality Index</div>
+          <div><strong>SGI</strong>: Sales Growth Index</div>
+        </div>
+        <div class="space-y-1">
+          <div><strong>DEPI</strong>: Depreciation Index</div>
+          <div><strong>SGAI</strong>: Sales General & Admin Index</div>
+          <div><strong>LVGI</strong>: Leverage Index</div>
+          <div><strong>TATA</strong>: Total Accruals to Total Assets</div>
+        </div>
+      </div>
+      <div class="bg-panel-2 border border-border p-3 rounded-lg flex items-center justify-between text-xs mt-2">
+        <span class="text-ink-soft">Risk Classification Threshold:</span>
+        <span class="font-bold text-red-400">M-Score &gt; -1.78 indicates manipulation risk</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Alignment and Synthesis -->
+  <section class="panel p-6 space-y-4">
+    <span class="eyebrow text-accent font-semibold">3. Model Consensus & AI Synthesis</span>
+    <h2 class="text-xl font-bold text-ink">Consensus Logic and AI Summaries</h2>
+    <p class="text-sm text-ink-soft leading-relaxed">
+      To merge the deterministic checks with the statistical classifier, we compute a consensus score:
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-ink-soft mt-2">
+      <div class="bg-panel-2/50 border border-border p-4 rounded-lg space-y-2">
+        <p class="font-semibold text-ink">Rule-Based Composite Confidence</p>
+        <p class="text-xxs leading-relaxed">
+          Aggregates Altman rating (up to 35%), Piotroski checklist score (up to 35%), and Beneish manipulation interpretation (up to 30%) into a weighted index.
+        </p>
+      </div>
+      <div class="bg-panel-2/50 border border-border p-4 rounded-lg space-y-2">
+        <p class="font-semibold text-ink">Agreement vs. Divergence Status</p>
+        <p class="text-xxs leading-relaxed">
+          Calculates the absolute difference between Rule-Based Confidence and ML Model Confidence. If the gap is &le; 15 points, they are marked in Consensus/Agreement. If it exceeds 15 points, they are marked as Divergence, raising a flag for human review.
+        </p>
+      </div>
+    </div>
+    
+    <div class="mt-4 border-t border-border pt-4">
+      <p class="text-xs eyebrow mb-2">Mistral AI Synthesis Brief</p>
+      <p class="text-sm text-ink-soft leading-relaxed">
+        The final text summary is compiled using the <strong>Mistral Large Latest</strong> model. Mistral is provided with the exact output array and values from the execution scripts, translating them into a balanced financial assessment covering overall status, strongest signals, and risk areas, without altering any calculation outputs.
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -4,23 +4,55 @@
 {% block title %}Standing Reports — Portfolio{% endblock %}
 
 {% block content %}
+<!-- Premium AI Analysis Input Card -->
+<div class="panel p-6 mb-8 relative overflow-hidden">
+  <div class="absolute -right-12 -top-12 w-32 h-32 bg-accent/10 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="absolute -left-12 -bottom-12 w-32 h-32 bg-agree/5 rounded-full blur-2xl pointer-events-none"></div>
+  
+  <span class="eyebrow">Analyze New Company</span>
+  <p class="text-xs text-ink-soft mt-1 mb-4 leading-relaxed">
+    Enter any US stock ticker. Our system will extract Yahoo Finance balance sheets, run Altman Z, Piotroski F, and Beneish M checks, compute RF bankruptcy probability, and draft a Mistral-powered analysis.
+  </p>
+  
+  <form action="{{ url_for('analyze') }}" method="POST" class="flex flex-col sm:flex-row gap-3">
+    <div class="relative flex-1">
+      <input type="text" 
+             name="ticker" 
+             placeholder="Enter stock ticker (e.g. MSFT, GOOG, TSLA, NVDA, AAPL)..." 
+             required
+             class="w-full bg-canvas/80 border border-border text-ink rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent transition-all duration-300 placeholder-ink-muted font-medium"
+             autofocus />
+    </div>
+    <button type="submit" 
+            class="px-6 py-3 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent/90 active:scale-98 transition-all duration-200 shrink-0 cursor-pointer shadow-lg shadow-accent/20">
+      Run AI Analysis
+    </button>
+  </form>
+</div>
+
+<!-- Portfolio List Card -->
 <div class="panel overflow-hidden">
-  <div class="px-6 py-4 border-b border-border">
-    <span class="eyebrow">Portfolio Screen</span>
+  <div class="px-6 py-4 border-b border-border bg-panel-2/50 flex items-center justify-between">
+    <span class="eyebrow">Analyzed Portfolio</span>
+    <span class="text-xs text-ink-muted font-medium">{{ companies|length }} Companies</span>
   </div>
   <div class="divide-y divide-border">
     {% for c in companies %}
     <a href="{{ url_for('report', company_id=c.id) }}"
-       class="flex items-center justify-between gap-4 px-6 py-4 hover:bg-panel-2 transition-colors">
+       class="flex items-center justify-between gap-4 px-6 py-4.5 hover:bg-panel-2 transition-all duration-200 group">
       <div>
-        <span class="text-ink font-medium">{{ c.name }}</span>
-        <span class="text-ink-muted text-sm ml-2">{{ c.ticker }} &middot; {{ c.sector }}</span>
+        <span class="text-ink font-semibold group-hover:text-accent transition-colors">{{ c.name }}</span>
+        <span class="text-ink-muted text-sm ml-2 font-mono">{{ c.ticker }} &middot; <span class="text-xs">{{ c.sector }}</span></span>
       </div>
       <div class="flex items-center gap-4 shrink-0">
         {{ confidence_badge(c.rule_based.composite_confidence, c.rule_based.confidence_label) }}
         {{ status_pill(c.agreement.status) }}
       </div>
     </a>
+    {% else %}
+    <div class="px-6 py-12 text-center text-ink-muted">
+      <p class="text-sm">No companies in portfolio yet. Analyze a ticker above to get started.</p>
+    </div>
     {% endfor %}
   </div>
 </div>
