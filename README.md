@@ -1,4 +1,4 @@
-# Standing Report — Frontend Scaffold
+# Standing Report
 
 Flask + Jinja + Tailwind CSS v4. Renders the AI Company Standing Report in
 all three wireframe layout directions (linear scroll, compact cards,
@@ -84,11 +84,6 @@ Fields with reference to the schema:
 }
 ```
 
-If the real backend's shape ends up differing (extra fields, renamed
-keys, a metric list of different length per company — already handled),
-adjust `load_companies()` to map their output into this shape rather
-than touching the templates.
-
 ## Structure
 
 ```
@@ -111,12 +106,3 @@ app/
     input.css               # Tailwind v4 theme tokens (@theme block)
     output.css               # built (gitignored in a real repo)
 ```
-
-## Notes
-
-- Colors, spacing, and copy follow the wireframes as given rather than
-  reinterpreting them — the palette lives in the `@theme` block in
-  `input.css` if it needs to shift later.
-- Missing/pending fields: wrap access with `default` filters (e.g.
-  `{{ company.trained_model.model_confidence | default('—') }}`) if a
-  report can land with the trained-model pass still running.
