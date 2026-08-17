@@ -1,37 +1,8 @@
-"""
-=============================================================================
-CS 254: Introduction to Artificial Intelligence — Final Project
-ROIC vs. WACC Economic Value Added (EVA) Engine
-=============================================================================
 
-Academic Citations & Theoretical Grounding:
-- Modigliani, F., & Miller, M. H. (1958). The Cost of Capital, Corporation
-  Finance and the Theory of Investment. The American Economic Review, 48(3), 261-297.
-- Sharpe, W. F. (1964). Capital Asset Prices: A Theory of Market Equilibrium
-  under Conditions of Risk. The Journal of Finance, 19(3), 425-442.
-- Stewart, G. B. (1991). The Quest for Value: The EVA Management Guide. HarperBusiness.
-
-Mathematical Formulation:
-  - Net Operating Profit After Tax (NOPAT) = EBIT * (1 - Effective Tax Rate)
-  - Operating Invested Capital = Total Assets - Excess Cash - Non-Interest Bearing Current Liab
-  - Return on Invested Capital (ROIC) = NOPAT / Invested Capital
-  - Cost of Equity (CAPM) Ke = Risk-Free Rate (Rf) + Beta * Market Risk Premium (MRP)
-  - Weighted Average Cost of Capital (WACC) = (We * Ke) + (Wd * Kd * (1 - Tax Rate))
-  - Economic Spread = ROIC - WACC
-
-Core Diligence Role:
-  Verifies whether a firm generates economic profit above its weighted opportunity
-  cost of capital, separating genuine value creators from value destroyers.
-=============================================================================
-"""
 
 import pandas as pd
 import numpy as np
 import yfinance as yf
-
-# ============================================================
-# Fields required for ROIC & WACC Analysis
-# ============================================================
 
 ROIC_WACC_FIELDS = {
     "ebit": [
@@ -186,9 +157,6 @@ def calculate_roic_wacc(
 
     nopat = ebit * (1.0 - effective_tax_rate)
 
-    # ----------------------------------------------------
-    # 2. Operating Invested Capital & ROIC
-    # ----------------------------------------------------
     # Standard formula: Total Assets - Excess Cash - Non-Interest-Bearing Current Liab
     invested_capital = total_assets - cash - current_liabilities
     if invested_capital <= 0:
@@ -197,9 +165,6 @@ def calculate_roic_wacc(
 
     roic = nopat / invested_capital if invested_capital > 0 else 0.0
 
-    # ----------------------------------------------------
-    # 3. Market Value of Equity & WACC Estimation
-    # ----------------------------------------------------
     # Get Beta from stock info or fallback to 1.0
     beta = 1.0
     market_cap = None

@@ -14,9 +14,7 @@ def calculate_altman_z(ticker, target_year):
         )
         return None
 
-    # --------------------------------------------------------
-    # Find the latest complete year at or before target_year
-    # --------------------------------------------------------
+
 
     usable_data = data[
         data["year"] <= target_year
@@ -49,9 +47,6 @@ def calculate_altman_z(ticker, target_year):
 
     actual_year = int(row["year"])
 
-    # --------------------------------------------------------
-    # Check whether we had to backtrack
-    # --------------------------------------------------------
 
     backtracked = actual_year != target_year
 
@@ -98,9 +93,6 @@ def calculate_altman_z(ticker, target_year):
         / row["X10"]
     )
 
-    # --------------------------------------------------------
-    # Altman Z-Score
-    # --------------------------------------------------------
 
     z_score = (
         1.2 * x1

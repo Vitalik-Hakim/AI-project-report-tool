@@ -3,10 +3,6 @@ import pandas as pd
 import numpy as np
 
 
-# ============================================================
-# 1. Features required by the trained model
-# ============================================================
-
 feature_names = {
     "X1": "Current Assets",
     "X2": "Cost of Goods Sold",
@@ -137,9 +133,6 @@ FIELD_RULES = {
 MODEL_FEATURES = list(FIELD_RULES.keys())
 
 
-# ============================================================
-# 2. Find Yahoo Finance field
-# ============================================================
 
 def find_field(index_list, rules):
 
@@ -153,19 +146,12 @@ def find_field(index_list, rules):
     return None
 
 
-# ============================================================
-# 3. Historical market cap
-# ============================================================
-
 def get_historical_market_cap(stock, statement_date):
 
     try:
 
         date = pd.Timestamp(statement_date)
 
-        # ----------------------------------------------------
-        # Historical shares outstanding
-        # ----------------------------------------------------
 
         shares = stock.get_shares_full(
             start=date - pd.Timedelta(days=30),
@@ -192,9 +178,6 @@ def get_historical_market_cap(stock, statement_date):
             shares_before_date.iloc[-1]
         )
 
-        # ----------------------------------------------------
-        # Historical stock price
-        # ----------------------------------------------------
 
         hist = stock.history(
             start=date - pd.Timedelta(days=5),
@@ -232,10 +215,6 @@ def get_historical_market_cap(stock, statement_date):
         return np.nan
 
 
-# ============================================================
-# 4. Get historical financial data
-# ============================================================
-
 def get_company_data(ticker):
 
     stock = yf.Ticker(ticker)
@@ -247,10 +226,6 @@ def get_company_data(ticker):
         raise ValueError(
             f"No financial data found for {ticker}"
         )
-
-    # --------------------------------------------------------
-    # Get all available financial statement dates
-    # --------------------------------------------------------
 
     dates = set()
 
@@ -272,9 +247,6 @@ def get_company_data(ticker):
 
     rows = []
 
-    # --------------------------------------------------------
-    # Extract every available year
-    # --------------------------------------------------------
 
     for date in dates:
 
@@ -284,9 +256,6 @@ def get_company_data(ticker):
             "statement_date": date
         }
 
-        # ----------------------------------------------------
-        # Extract X1-X18
-        # ----------------------------------------------------
 
         for feature, rules in FIELD_RULES.items():
 
@@ -328,9 +297,6 @@ def get_company_data(ticker):
             else:
                 row[feature] = np.nan
 
-        # ----------------------------------------------------
-        # X8 - Historical market value
-        # ----------------------------------------------------
 
         row["X8"] = get_historical_market_cap(
             stock,
@@ -339,9 +305,6 @@ def get_company_data(ticker):
 
         rows.append(row)
 
-    # --------------------------------------------------------
-    # Create historical DataFrame
-    # --------------------------------------------------------
 
     df = pd.DataFrame(rows)
 

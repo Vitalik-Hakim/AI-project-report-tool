@@ -1,28 +1,3 @@
-"""
-=============================================================================
-CS 254: Introduction to Artificial Intelligence — Final Project
-Main Orchestration Pipeline: "The Analyst's Second Opinion"
-=============================================================================
-
-Authors:
-- Abdul Hakim Aremeyaw (Software Engineering & Deployment)
-- Haris Tiyumtaba Issah (Data Engineering & ML Classifier)
-- Samira Ewura-Esi Donkoh (Financial Metrics & Report Lead)
-- Vincent Adijore Chanayire (Rule-Based Engines & Presentation Lead)
-
-Institution: Ashesi University, Department of Computer Science (2026)
-
-Core System Architecture (5 Layers):
-1. Data Extraction: yfinance exact-match parser with data backtracking checks.
-2. Rule-Based Scoring: 6-pillar fundamental analysis (Altman, Piotroski,
-   Beneish, DuPont, Cash Quality, ROIC vs. WACC).
-3. Supervised ML Classifier: Calibrated Random Forest bankruptcy prediction.
-4. Composite Confidence & Divergence Layer: Balanced rule confidence vs.
-   ML distress probability, with category-level driver diagnosis.
-5. Narrative Layer: Strictly constrained LLM synthesis (no hallucinated facts,
-   no metric recalculations, neutral divergence framing).
-=============================================================================
-"""
 
 import os
 import datetime

@@ -1,33 +1,8 @@
-"""
-=============================================================================
-CS 254: Introduction to Artificial Intelligence — Final Project
-Cash Flow Quality & Conversion Analysis Engine
-=============================================================================
 
-Academic Citations & Theoretical Grounding:
-- Sloan, R. G. (1996). Do Stock Prices Fully Reflect Information in Accruals
-  and Cash Flows about Future Earnings? The Accounting Review, 71(3), 289-315.
-- Dechow, P. M., & Dichev, I. D. (2002). The Quality of Accruals and Earnings:
-  The Role of Accrual Estimation Errors. The Accounting Review, 77(s-1), 35-59.
-
-Mathematical Formulation:
-  - Free Cash Flow (FCF) = Operating Cash Flow (OCF) - Capital Expenditures (CapEx)
-  - Cash Conversion Ratio (CCR) = Operating Cash Flow / Net Income
-  - FCF Conversion Ratio = Free Cash Flow / Net Income
-
-Core Diligence Role:
-  Assesses whether accounting net income is supported by genuine cash inflows,
-  identifies aggressive working capital accruals, and tracks multi-year FCF trends.
-=============================================================================
-"""
 
 import pandas as pd
 import numpy as np
 import yfinance as yf
-
-# ============================================================
-# Fields required for Cash Quality Analysis
-# ============================================================
 
 CASH_QUALITY_FIELDS = {
     "net_income": [

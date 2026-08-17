@@ -3,10 +3,6 @@ import pandas as pd
 import numpy as np
 
 
-# ============================================================
-# Fields required for Piotroski F-Score
-# ============================================================
-
 PIOTROSKI_FIELDS = {
     "net_income": [
         "Net Income",
@@ -214,10 +210,6 @@ def get_piotroski_data(ticker, target_year):
     if df.empty:
         return None
 
-    # --------------------------------------------------------
-    # Search backward for two consecutive complete years
-    # --------------------------------------------------------
-
     required = list(PIOTROSKI_FIELDS.keys()) + [
         "shares_outstanding"
     ]
@@ -262,9 +254,6 @@ def get_piotroski_data(ticker, target_year):
                 [current, previous]
             ).reset_index(drop=True)
 
-    # --------------------------------------------------------
-    # No usable pair found
-    # --------------------------------------------------------
 
     print(
         f"Could not find two consecutive complete "
@@ -310,25 +299,16 @@ def calculate_piotroski(ticker, target_year):
             f"{previous_year}."
         )
 
-    # ========================================================
-    # 1. Positive Net Income
-    # ========================================================
 
     signals["positive_net_income"] = int(
         current["net_income"] > 0
     )
 
-    # ========================================================
-    # 2. Positive Operating Cash Flow
-    # ========================================================
 
     signals["positive_operating_cash_flow"] = int(
         current["operating_cash_flow"] > 0
     )
 
-    # ========================================================
-    # 3. Improving ROA
-    # ========================================================
 
     roa_current = (
         current["net_income"]
@@ -353,9 +333,6 @@ def calculate_piotroski(ticker, target_year):
         > current["net_income"]
     )
 
-    # ========================================================
-    # 5. Lower Leverage
-    # ========================================================
 
     leverage_current = (
         current["long_term_debt"]
@@ -389,18 +366,13 @@ def calculate_piotroski(ticker, target_year):
         current_ratio_current > current_ratio_previous
     )
 
-    # ========================================================
-    # 7. No New Shares Issued
-    # ========================================================
 
     signals["no_new_shares"] = int(
         current["shares_outstanding"]
         <= previous["shares_outstanding"]
     )
 
-    # ========================================================
-    # 8. Improving Gross Margin
-    # ========================================================
+
 
     gross_margin_current = (
         current["gross_profit"]
@@ -416,10 +388,6 @@ def calculate_piotroski(ticker, target_year):
         gross_margin_current > gross_margin_previous
     )
 
-    # ========================================================
-    # 9. Improving Asset Turnover
-    # ========================================================
-
     asset_turnover_current = (
         current["total_revenue"]
         / current["total_assets"]
@@ -434,9 +402,6 @@ def calculate_piotroski(ticker, target_year):
         asset_turnover_current > asset_turnover_previous
     )
 
-    # ========================================================
-    # Total Score
-    # ========================================================
 
     score = sum(signals.values())
 

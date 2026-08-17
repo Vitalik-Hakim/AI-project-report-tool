@@ -1,34 +1,8 @@
-"""
-=============================================================================
-CS 254: Introduction to Artificial Intelligence — Final Project
-DuPont 3-Step Return on Equity (ROE) Decomposition Engine
-=============================================================================
 
-Academic Citations & Theoretical Grounding:
-- Donaldson, G. (1961). Corporate Debt Capacity. Harvard Business School.
-- Soliman, M. T. (2008). The Use of DuPont Analysis by Market Participants.
-  The Accounting Review, 83(3), 823-853.
-
-Mathematical Formulation:
-  ROE = Net Profit Margin * Asset Turnover * Financial Leverage Multiplier
-  Where:
-    - Net Profit Margin = Net Income / Revenue (Operational Profitability)
-    - Asset Turnover = Revenue / Total Assets (Capital Efficiency)
-    - Equity Multiplier = Total Assets / Total Stockholders' Equity (Leverage)
-
-Core Diligence Role:
-  Distinguishes between genuine operational profitability (margin & efficiency)
-  versus financial engineering driven by high debt leverage.
-=============================================================================
-"""
 
 import pandas as pd
 import numpy as np
 import yfinance as yf
-
-# ============================================================
-# Fields required for DuPont Analysis
-# ============================================================
 
 DUPONT_FIELDS = {
     "net_income": [
