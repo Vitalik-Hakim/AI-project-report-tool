@@ -85,9 +85,7 @@ def find_field(index_list, possible_names):
     return None
 
 
-# ============================================================
 # 3. Get a financial value
-# ============================================================
 
 def get_value(date, field, balance_sheet, financials, cashflow):
 
@@ -117,9 +115,7 @@ def get_value(date, field, balance_sheet, financials, cashflow):
     return float(value)
 
 
-# ============================================================
 # 4. Extract historical data
-# ============================================================
 
 def get_beneish_data(ticker):
 
@@ -138,9 +134,8 @@ def get_beneish_data(ticker):
             f"No financial data found for {ticker}"
         )
 
-    # --------------------------------------------------------
+
     # Get available statement dates
-    # --------------------------------------------------------
 
     dates = set()
 
@@ -165,10 +160,6 @@ def get_beneish_data(ticker):
     )
 
     rows = []
-
-    # --------------------------------------------------------
-    # Extract each year
-    # --------------------------------------------------------
 
     for date in dates:
 
@@ -200,9 +191,7 @@ def get_beneish_data(ticker):
     return df
 
 
-# ============================================================
 # 5. Find two consecutive usable years
-# ============================================================
 
 def get_two_years(ticker, target_year):
 
@@ -241,9 +230,7 @@ def get_two_years(ticker, target_year):
     return current, previous
 
 
-# ============================================================
 # 6. Calculate Beneish M-Score
-# ============================================================
 
 def calculate_beneish(ticker, target_year):
 
@@ -281,9 +268,8 @@ def calculate_beneish(ticker, target_year):
             f"{current_year} and previous year "
             f"{previous_year}."
         )
-    # --------------------------------------------------------
+
     # Current year values
-    # --------------------------------------------------------
 
     AR_t = current["receivables"]
     REV_t = current["revenue"]
@@ -299,9 +285,7 @@ def calculate_beneish(ticker, target_year):
     NI_t = current["net_income"]
     CFO_t = current["operating_cash_flow"]
 
-    # --------------------------------------------------------
     # Previous year values
-    # --------------------------------------------------------
 
     AR_prev = previous["receivables"]
     REV_prev = previous["revenue"]
@@ -315,9 +299,7 @@ def calculate_beneish(ticker, target_year):
     CL_prev = previous["current_liabilities"]
     LTD_prev = previous["long_term_debt"]
 
-    # ========================================================
     # Beneish indices
-    # ========================================================
 
     # 1. Days Sales in Receivables Index
     DSRI = (
@@ -379,10 +361,6 @@ def calculate_beneish(ticker, target_year):
         TA_t
     )
 
-    # ========================================================
-    # M-Score
-    # ========================================================
-
     M_SCORE = (
         -4.84
         + 0.920 * DSRI
@@ -395,9 +373,7 @@ def calculate_beneish(ticker, target_year):
         - 0.327 * LVGI
     )
 
-    # ========================================================
     # Interpretation
-    # ========================================================
 
     if M_SCORE > -1.78:
 
@@ -413,9 +389,7 @@ def calculate_beneish(ticker, target_year):
 
     df = pd.concat([current, previous])
 
-    # ========================================================
     # Output
-    # ========================================================
 
     return {
         "ticker": ticker,

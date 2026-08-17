@@ -144,9 +144,7 @@ def calculate_roic_wacc(
     long_term_debt = current["long_term_debt"] if not pd.isna(current["long_term_debt"]) else 0.0
     total_equity = current["total_equity"] if not pd.isna(current["total_equity"]) else 0.0
 
-    # ----------------------------------------------------
     # 1. Effective Tax Rate & NOPAT
-    # ----------------------------------------------------
     ebt = ebit - interest_expense
     if ebt > 0 and tax_provision is not None and tax_provision > 0:
         effective_tax_rate = tax_provision / ebt
@@ -207,9 +205,7 @@ def calculate_roic_wacc(
     # WACC = We * Ke + Wd * Kd * (1 - t)
     wacc = (we * cost_of_equity) + (wd * after_tax_cost_of_debt)
 
-    # ----------------------------------------------------
     # 4. Economic Value Added (EVA) Spread
-    # ----------------------------------------------------
     economic_spread = roic - wacc
 
     if economic_spread >= 0.05:
