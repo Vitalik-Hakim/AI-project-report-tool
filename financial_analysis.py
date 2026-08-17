@@ -229,9 +229,7 @@ def map_backend_to_frontend(res, llm_report):
     beneish_interp = beneish.get("interpretation", "Unknown")
     beneish_flag = "good" if "Unlikely" in str(beneish_interp) else "warn"
 
-    # ========================================================
     # Rule-Based Composite Confidence (Balanced 6 Pillars)
-    # ========================================================
     # Altman (20%), Piotroski (20%), DuPont (15%), Cash Quality (15%), ROIC/WACC (15%), Beneish (15%)
     altman_pts = 20.0 if altman_flag == "good" else (12.0 if altman_flag == "neutral" else 3.0)
     piotroski_pts = (piotroski_score / 9.0) * 20.0
@@ -244,18 +242,15 @@ def map_backend_to_frontend(res, llm_report):
     composite_confidence = max(5, min(99, composite_confidence))
     confidence_label = "High" if composite_confidence >= 80 else ("Medium" if composite_confidence >= 55 else "Low")
 
-    # ========================================================
+
     # Supervised ML Model Distress & Safety Confidence
-    # ========================================================
     bankruptcy = res.get("bankruptcy") or {}
     prob = bankruptcy.get("bankruptcy_probability", 0.0) if bankruptcy else 0.0
     distress_prob = round(prob * 100)
     model_conf = round((1.0 - prob) * 100) if prob < 0.5 else round(prob * 100)
     model_conf_label = "High" if model_conf >= 85 else ("Med-High" if model_conf >= 70 else ("Medium" if model_conf >= 55 else "Low"))
 
-    # ========================================================
     # Agreement / Divergence Comparison Layer
-    # ========================================================
     gap_points = abs(composite_confidence - model_conf)
     status = "agreement" if gap_points <= 15 else "divergence"
 
