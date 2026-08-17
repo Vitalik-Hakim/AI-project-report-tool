@@ -12,11 +12,12 @@
         "composite_confidence": 86,
         "confidence_label": "High",
         "metrics": [
-          {"name": "DuPont Breakdown", "result": "ROE 18.2% \u2014 margin-driven", "flag": "good"},
-          {"name": "Piotroski F-Score", "result": "7 / 9", "flag": "good"},
-          {"name": "Altman Z-Score", "result": "3.4 \u2014 Safe zone", "flag": "good"},
-          {"name": "ROIC vs. WACC", "result": "14.1% vs. 8.7% \u2014 value-creating", "flag": "good"},
-          {"name": "Cash Conversion Ratio", "result": "0.92", "flag": "good"}
+          {"name": "Piotroski F-Score", "result": "7 / 9 (Strong)", "flag": "good"},
+          {"name": "Altman Z-Score", "result": "3.42 (Safe Zone)", "flag": "good"},
+          {"name": "DuPont ROE", "result": "18.2% (Operational-Driven)", "flag": "good"},
+          {"name": "ROIC vs WACC", "result": "ROIC 14.1% vs WACC 8.7% (Spread +5.4%)", "flag": "good"},
+          {"name": "Cash Quality", "result": "Strong (FCF Conversion 92%)", "flag": "good"},
+          {"name": "Beneish M-Score", "result": "-2.65 (Unlikely to be manipulating)", "flag": "good"}
         ]
       },
       "trained_model": {
@@ -28,14 +29,90 @@
         "status": "agreement",
         "gap_points": 3,
         "explanation": "Rule-based (86%) and trained model (89%) confidence independently converge on a low-risk read. This reinforces the conclusion rather than requiring further investigation.",
-        "next_step": null
+        "next_step": "Standard due diligence checklist."
       },
       "valuation_standing": "EV/EBITDA of 11.2x sits in the top quartile of its peer cluster, suggesting the market already prices in strong fundamentals.",
       "risk_factors": [
         "Elevated customer concentration in top retail account",
         "Input-cost exposure to a single commodity category"
       ],
-      "conclusion": "Meridian presents a financially sound profile with strong, cash-backed profitability and manageable leverage. Both assessments independently support a high-confidence, low-distress standing \u2014 diligence should focus on customer concentration, not balance-sheet risk."
+      "conclusion": "Meridian presents a financially sound profile with strong, cash-backed profitability and manageable leverage. Both assessments independently support a high-confidence, low-distress standing.",
+      "raw_details": {
+        "altman": {
+          "altman_z_score": 3.42,
+          "altman_classification": "Safe Zone",
+          "data_note": "Complete data was available for analysis year."
+        },
+        "piotroski": {
+          "piotroski_score": 7,
+          "classification": "Strong",
+          "signals": {
+            "positive_net_income": 1,
+            "positive_operating_cash_flow": 1,
+            "improving_roa": 1,
+            "cash_flow_greater_than_net_income": 1,
+            "lower_leverage": 1,
+            "improving_current_ratio": 1,
+            "no_new_shares": 1,
+            "improving_gross_margin": 0,
+            "improving_asset_turnover": 0
+          },
+          "data_note": "Calculated relative to prior year statements."
+        },
+        "dupont": {
+          "roe": 0.182,
+          "profit_margin": 0.091,
+          "asset_turnover": 1.25,
+          "equity_multiplier": 1.60,
+          "primary_driver": "Operational-Driven",
+          "classification": "High Quality / Strong Return",
+          "trend": {
+            "previous_year": 2024,
+            "previous_roe": 0.174,
+            "roe_change": 0.008
+          },
+          "data_note": "3-factor DuPont ROE decomposition."
+        },
+        "cash_quality": {
+          "operating_cash_flow": 485000000.0,
+          "capital_expenditure": 95000000.0,
+          "free_cash_flow": 390000000.0,
+          "cash_conversion_ratio": 1.14,
+          "fcf_conversion_ratio": 0.92,
+          "fcf_trend": "Improving",
+          "conversion_level": "Strong",
+          "overall_cash_quality": "Strong",
+          "data_note": "Operating cash flow strongly exceeds net income."
+        },
+        "roic_wacc": {
+          "roic": 0.141,
+          "wacc": 0.087,
+          "economic_spread": 0.054,
+          "value_creation": "Strong Value Creation",
+          "beta": 0.85,
+          "cost_of_equity": 0.089,
+          "pre_tax_cost_of_debt": 0.052,
+          "after_tax_cost_of_debt": 0.041,
+          "equity_weight": 0.82,
+          "debt_weight": 0.18,
+          "data_note": "NOPAT over operating invested capital exceeds WACC by 5.4%."
+        },
+        "beneish": {
+          "M_score": -2.65,
+          "interpretation": "Unlikely to be manipulating earnings",
+          "indices": {
+            "DSRI": 0.98,
+            "GMI": 1.02,
+            "AQI": 0.94,
+            "SGI": 1.06,
+            "DEPI": 1.01,
+            "SGAI": 0.99,
+            "LVGI": 0.95,
+            "TATA": -0.04
+          },
+          "data_note": "All 8 manipulation indices remain safely below risk thresholds."
+        }
+      }
     },
     {
       "id": "vig",
@@ -46,99 +123,110 @@
       "generated_at": "Jul 31, 2026",
       "business_overview": "Manufactures precision components for industrial equipment OEMs, reporting under GAAP.",
       "rule_based": {
-        "composite_confidence": 81,
-        "confidence_label": "High",
+        "composite_confidence": 68,
+        "confidence_label": "Medium",
         "metrics": [
-          {"name": "Piotroski F-Score", "result": "5 / 9", "flag": "neutral"},
-          {"name": "Altman Z-Score", "result": "2.1 \u2014 Grey", "flag": "warn"}
+          {"name": "Piotroski F-Score", "result": "5 / 9 (Moderate)", "flag": "neutral"},
+          {"name": "Altman Z-Score", "result": "2.12 (Grey Zone)", "flag": "warn"},
+          {"name": "DuPont ROE", "result": "12.4% (Leverage-Driven)", "flag": "warn"},
+          {"name": "ROIC vs WACC", "result": "ROIC 8.2% vs WACC 9.1% (Spread -0.9%)", "flag": "neutral"},
+          {"name": "Cash Quality", "result": "Watch (FCF Conversion 48%)", "flag": "warn"},
+          {"name": "Beneish M-Score", "result": "-2.10 (Unlikely to be manipulating)", "flag": "good"}
         ]
       },
       "trained_model": {
         "distress_probability": 38,
-        "model_confidence": 47,
-        "confidence_label": "Medium-Low"
-      },
-      "agreement": {
-        "status": "divergence",
-        "gap_points": 34,
-        "explanation": "Divergence driven by elevated Debt/EBITDA interacting with declining asset turnover \u2014 a nonlinear pattern the classical Z-Score weights less heavily than the trained model.",
-        "next_step": "Review leverage trend and refinancing schedule before relying on the rule-based score alone."
-      },
-      "valuation_standing": "EV/EBITDA of 7.4x sits below its peer median, consistent with the market pricing in elevated leverage risk.",
-      "risk_factors": [
-        "Rising Debt/EBITDA against a declining asset turnover trend",
-        "Refinancing schedule concentrated within the next 18 months"
-      ],
-      "conclusion": "The two methods disagree meaningfully on distress risk. Analyst review is recommended before this standing is relied on for diligence."
-    },
-    {
-      "id": "crsr",
-      "name": "Corsair Logistics",
-      "ticker": "CRSR",
-      "sector": "Freight & Logistics",
-      "fiscal_year": "FY2025",
-      "generated_at": "Jul 31, 2026",
-      "business_overview": "Provides third-party freight brokerage and warehousing across North America, reporting under GAAP.",
-      "rule_based": {
-        "composite_confidence": 74,
-        "confidence_label": "Med-High",
-        "metrics": [
-          {"name": "Piotroski F-Score", "result": "6 / 9", "flag": "good"},
-          {"name": "Altman Z-Score", "result": "2.9 \u2014 Grey-Safe", "flag": "neutral"},
-          {"name": "Cash Conversion Ratio", "result": "1.05", "flag": "good"}
-        ]
-      },
-      "trained_model": {
-        "distress_probability": 19,
-        "model_confidence": 71,
-        "confidence_label": "Med-High"
-      },
-      "agreement": {
-        "status": "agreement",
-        "gap_points": 3,
-        "explanation": "Rule-based (74%) and trained model (71%) confidence independently converge on a moderate-low risk read.",
-        "next_step": null
-      },
-      "valuation_standing": "EV/EBITDA of 8.1x is in line with the freight-brokerage peer median.",
-      "risk_factors": [
-        "Exposure to freight rate cyclicality",
-        "Thin margins typical of the brokerage model"
-      ],
-      "conclusion": "Corsair's standing is consistent across both methods \u2014 moderate risk, no immediate red flags."
-    },
-    {
-      "id": "hldm",
-      "name": "Halden Materials",
-      "ticker": "HLDM",
-      "sector": "Building Materials",
-      "fiscal_year": "FY2025",
-      "generated_at": "Jul 31, 2026",
-      "business_overview": "Produces aggregate and cement products for regional construction markets, reporting under GAAP.",
-      "rule_based": {
-        "composite_confidence": 63,
-        "confidence_label": "Medium",
-        "metrics": [
-          {"name": "Piotroski F-Score", "result": "4 / 9", "flag": "warn"},
-          {"name": "Altman Z-Score", "result": "1.8 \u2014 Grey", "flag": "warn"}
-        ]
-      },
-      "trained_model": {
-        "distress_probability": 41,
-        "model_confidence": 58,
+        "model_confidence": 62,
         "confidence_label": "Medium"
       },
       "agreement": {
         "status": "divergence",
-        "gap_points": 5,
-        "explanation": "Both methods land in a similar medium-confidence band, but disagree slightly on the primary driver of risk.",
-        "next_step": "Confirm recent capex financing terms before finalizing the standing."
+        "gap_points": 24,
+        "explanation": "Divergence driven by elevated financial leverage (Equity Multiplier 3.8x) interacting with declining asset turnover and negative economic spread (-0.9%). Analyst review is recommended.",
+        "next_step": "Review leverage trend and refinancing schedule before relying on the rule-based score alone."
       },
-      "valuation_standing": "EV/EBITDA of 6.0x trails peers, reflecting exposure to regional construction demand.",
+      "valuation_standing": "EV/EBITDA of 7.4x sits below its peer median, consistent with the market pricing in elevated leverage risk.",
       "risk_factors": [
-        "Cyclical exposure to regional construction spend",
-        "Recent debt-financed capex increasing leverage"
+        "Rising Debt/Assets against a declining asset turnover trend",
+        "Refinancing schedule concentrated within the next 18 months"
       ],
-      "conclusion": "Halden's standing is uncertain enough that both signals warrant a closer analyst pass before diligence proceeds."
+      "conclusion": "The two methods disagree on distress risk due to elevated debt leverage. Analyst review is recommended before this standing is relied on for diligence.",
+      "raw_details": {
+        "altman": {
+          "altman_z_score": 2.12,
+          "altman_classification": "Grey Zone",
+          "data_note": "Score falls into grey zone due to high leverage."
+        },
+        "piotroski": {
+          "piotroski_score": 5,
+          "classification": "Moderate",
+          "signals": {
+            "positive_net_income": 1,
+            "positive_operating_cash_flow": 1,
+            "improving_roa": 0,
+            "cash_flow_greater_than_net_income": 0,
+            "lower_leverage": 0,
+            "improving_current_ratio": 1,
+            "no_new_shares": 1,
+            "improving_gross_margin": 1,
+            "improving_asset_turnover": 0
+          },
+          "data_note": "Calculated relative to prior year statements."
+        },
+        "dupont": {
+          "roe": 0.124,
+          "profit_margin": 0.042,
+          "asset_turnover": 0.78,
+          "equity_multiplier": 3.78,
+          "primary_driver": "Leverage-Driven",
+          "classification": "Moderate Return",
+          "trend": {
+            "previous_year": 2024,
+            "previous_roe": 0.118,
+            "roe_change": 0.006
+          },
+          "data_note": "DuPont indicates leverage multiplier accounts for most of ROE."
+        },
+        "cash_quality": {
+          "operating_cash_flow": 142000000.0,
+          "capital_expenditure": 88000000.0,
+          "free_cash_flow": 54000000.0,
+          "cash_conversion_ratio": 0.88,
+          "fcf_conversion_ratio": 0.48,
+          "fcf_trend": "Declining",
+          "conversion_level": "Weak",
+          "overall_cash_quality": "Watch",
+          "data_note": "Free cash flow conversion weakened year-over-year."
+        },
+        "roic_wacc": {
+          "roic": 0.082,
+          "wacc": 0.091,
+          "economic_spread": -0.009,
+          "value_creation": "Destroying Value",
+          "beta": 1.22,
+          "cost_of_equity": 0.109,
+          "pre_tax_cost_of_debt": 0.068,
+          "after_tax_cost_of_debt": 0.054,
+          "equity_weight": 0.65,
+          "debt_weight": 0.35,
+          "data_note": "ROIC falls 0.9% below estimated cost of capital."
+        },
+        "beneish": {
+          "M_score": -2.10,
+          "interpretation": "Unlikely to be manipulating earnings",
+          "indices": {
+            "DSRI": 1.08,
+            "GMI": 0.98,
+            "AQI": 1.04,
+            "SGI": 1.02,
+            "DEPI": 1.03,
+            "SGAI": 1.01,
+            "LVGI": 1.15,
+            "TATA": 0.02
+          },
+          "data_note": "Leverage index (LVGI) elevated at 1.15."
+        }
+      }
     }
   ]
 }

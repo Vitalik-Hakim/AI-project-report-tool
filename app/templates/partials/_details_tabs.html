@@ -1,30 +1,33 @@
 {% macro altman_panel(raw_altman) %}
+{% set raw_altman = raw_altman or {} %}
+{% set z_val = raw_altman.altman_z_score if raw_altman.altman_z_score is defined else (raw_altman.z_score if raw_altman.z_score is defined else none) %}
+{% set classification = raw_altman.altman_classification if raw_altman.altman_classification is defined else (raw_altman.classification if raw_altman.classification is defined else 'N/A') %}
 <div class="space-y-4">
   <div class="flex items-center justify-between border-b border-border pb-3">
     <div>
-      <span class="eyebrow">Altman Z-Score Classification</span>
+      <span class="eyebrow">Altman Z-Score Solvency Screening</span>
       <h3 class="text-xl font-bold text-ink mt-1">
-        {{ raw_altman.classification | default('N/A') }}
+        {{ classification }}
       </h3>
     </div>
     <div class="text-right">
       <span class="eyebrow">Score Value</span>
       <p class="text-3xl font-extrabold text-accent mt-0.5">
-        {{ "%.2f"|format(raw_altman.z_score) if raw_altman.z_score is defined else 'N/A' }}
+        {{ "%.2f"|format(z_val) if z_val is not none else 'N/A' }}
       </p>
     </div>
   </div>
 
   <div class="grid grid-cols-3 gap-2 text-center text-xs font-semibold py-2">
-    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Distress Zone' %}bg-red-950/40 border border-red-800 text-red-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+    <div class="rounded-md p-2.5 {% if 'Distress' in classification %}bg-red-950/40 border border-red-800 text-red-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
       <p>Distress Zone</p>
       <p class="mt-0.5 text-xxs font-normal">&lt; 1.81</p>
     </div>
-    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Grey Zone' %}bg-amber-950/40 border border-amber-800 text-amber-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+    <div class="rounded-md p-2.5 {% if 'Grey' in classification %}bg-amber-950/40 border border-amber-800 text-amber-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
       <p>Grey Zone</p>
       <p class="mt-0.5 text-xxs font-normal">1.81 – 2.99</p>
     </div>
-    <div class="rounded-md p-2.5 {% if raw_altman.classification == 'Safe Zone' %}bg-emerald-950/40 border border-emerald-800 text-emerald-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
+    <div class="rounded-md p-2.5 {% if 'Safe' in classification %}bg-emerald-950/40 border border-emerald-800 text-emerald-400{% else %}bg-panel-2 border border-border text-ink-muted{% endif %}">
       <p>Safe Zone</p>
       <p class="mt-0.5 text-xxs font-normal">&gt; 2.99</p>
     </div>
@@ -39,6 +42,8 @@
 
 
 {% macro piotroski_panel(raw_piotroski) %}
+{% set raw_piotroski = raw_piotroski or {} %}
+{% set score_val = raw_piotroski.piotroski_score if raw_piotroski.piotroski_score is defined else (raw_piotroski.score if raw_piotroski.score is defined else 0) %}
 <div class="space-y-4">
   <div class="flex items-center justify-between border-b border-border pb-3">
     <div>
@@ -50,7 +55,7 @@
     <div class="text-right">
       <span class="eyebrow">F-Score</span>
       <p class="text-3xl font-extrabold text-accent mt-0.5">
-        {{ raw_piotroski.score | default(0) }} <span class="text-lg font-normal text-ink-muted">/ 9</span>
+        {{ score_val }} <span class="text-lg font-normal text-ink-muted">/ 9</span>
       </p>
     </div>
   </div>
@@ -60,7 +65,7 @@
       'positive_net_income': 'Positive Net Income (Profitability)',
       'positive_operating_cash_flow': 'Positive Cash Flow from Operations',
       'improving_roa': 'Improving Return on Assets (ROA)',
-      'cash_flow_greater_than_net_income': 'Operating Cash Flow > Net Income (Quality)',
+      'cash_flow_greater_than_net_income': 'Operating Cash Flow > Net Income (Accrual Quality)',
       'lower_leverage': 'Lower Leverage (Long-Term Debt Ratio)',
       'improving_current_ratio': 'Improving Current Ratio (Liquidity)',
       'no_new_shares': 'No New Shares Issued (Non-Dilution)',
@@ -69,7 +74,7 @@
     } %}
     
     {% for key, label in labels.items() %}
-    {% set passed = raw_piotroski.signals[key] | default(0) == 1 %}
+    {% set passed = (raw_piotroski.signals[key] | default(0) == 1) if raw_piotroski.signals is defined else false %}
     <div class="flex items-center justify-between py-2 text-sm">
       <span class="{% if passed %}text-ink{% else %}text-ink-muted line-through{% endif %}">{{ label }}</span>
       <span class="flex items-center justify-center w-5 h-5 rounded-full {% if passed %}bg-emerald-950 text-emerald-400 border border-emerald-800{% else %}bg-red-950 text-red-400 border border-red-800{% endif %} font-mono text-xs font-bold">
@@ -87,7 +92,204 @@
 {% endmacro %}
 
 
+{% macro dupont_panel(raw_dupont) %}
+{% set raw_dupont = raw_dupont or {} %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">DuPont ROE Decomposition</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_dupont.classification | default('Return Analysis') }}
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">Return on Equity (ROE)</span>
+      <p class="text-3xl font-extrabold text-accent mt-0.5">
+        {{ "%.1f%%"|format(raw_dupont.roe * 100) if raw_dupont.roe is defined and raw_dupont.roe is not none else 'N/A' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Primary Return Driver Badge -->
+  <div class="p-3 rounded-lg border flex items-center justify-between text-xs
+    {% if raw_dupont.primary_driver == 'Operational-Driven' %}
+      bg-emerald-950/30 border-emerald-800 text-emerald-300
+    {% elif raw_dupont.primary_driver == 'Leverage-Driven' %}
+      bg-amber-950/30 border-amber-800 text-amber-300
+    {% else %}
+      bg-panel-2 border-border text-ink-soft
+    {% endif %}">
+    <span class="font-semibold">Primary Return Driver:</span>
+    <span class="font-mono uppercase tracking-wider font-bold">{{ raw_dupont.primary_driver | default('Balanced') }}</span>
+  </div>
+
+  <!-- 3 Factors Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">1. Net Profit Margin</span>
+      <p class="text-xl font-bold text-ink mt-1">
+        {{ "%.1f%%"|format(raw_dupont.profit_margin * 100) if raw_dupont.profit_margin is defined and raw_dupont.profit_margin is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">Net Income / Revenue</p>
+    </div>
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">2. Asset Turnover</span>
+      <p class="text-xl font-bold text-ink mt-1">
+        {{ "%.2fx"|format(raw_dupont.asset_turnover) if raw_dupont.asset_turnover is defined and raw_dupont.asset_turnover is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">Revenue / Total Assets</p>
+    </div>
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">3. Equity Multiplier</span>
+      <p class="text-xl font-bold text-ink mt-1">
+        {{ "%.2fx"|format(raw_dupont.equity_multiplier) if raw_dupont.equity_multiplier is defined and raw_dupont.equity_multiplier is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">Total Assets / Total Equity</p>
+    </div>
+  </div>
+
+  <!-- Prior Year Trend -->
+  {% if raw_dupont.trend and raw_dupont.trend.previous_roe is defined and raw_dupont.trend.previous_roe is not none %}
+  <div class="bg-panel-2 border border-border p-3.5 rounded-lg text-xs space-y-1">
+    <p class="font-medium text-ink">Prior Year Comparison (FY{{ raw_dupont.trend.previous_year }})</p>
+    <div class="flex items-center justify-between text-ink-soft pt-1">
+      <span>Prior ROE: {{ "%.1f%%"|format(raw_dupont.trend.previous_roe * 100) }}</span>
+      <span class="font-semibold {% if raw_dupont.trend.roe_change >= 0 %}text-emerald-400{% else %}text-amber-400{% endif %}">
+        ROE Change: {{ "%+.1f%%"|format(raw_dupont.trend.roe_change * 100) if raw_dupont.trend.roe_change is not none else 'N/A' }}
+      </span>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft">
+    <p class="font-medium text-ink mb-1">DuPont Analysis Note</p>
+    <p class="leading-relaxed">{{ raw_dupont.data_note | default('3-factor return on equity decomposition.') }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% macro cash_quality_panel(raw_cash) %}
+{% set raw_cash = raw_cash or {} %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">Cash Conversion & Quality</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_cash.overall_cash_quality | default('Standard') }} Cash Profile
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">Free Cash Flow (FCF)</span>
+      <p class="text-2xl font-extrabold text-accent mt-0.5">
+        {% if raw_cash.free_cash_flow is defined and raw_cash.free_cash_flow is not none %}
+          ${{ "{:,.0f}".format(raw_cash.free_cash_flow) }}
+        {% else %}
+          N/A
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Cash Conversion Indicators -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">Cash Conversion (OCF / Net Income)</span>
+      <p class="text-xl font-bold text-ink mt-1">
+        {{ "%.1f%%"|format(raw_cash.cash_conversion_ratio * 100) if raw_cash.cash_conversion_ratio is defined and raw_cash.cash_conversion_ratio is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">&gt; 100% indicates earnings fully backed by cash</p>
+    </div>
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">FCF Conversion (FCF / Net Income)</span>
+      <p class="text-xl font-bold text-ink mt-1">
+        {{ "%.1f%%"|format(raw_cash.fcf_conversion_ratio * 100) if raw_cash.fcf_conversion_ratio is defined and raw_cash.fcf_conversion_ratio is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">Level: {{ raw_cash.conversion_level | default('N/A') }} &middot; Trend: {{ raw_cash.fcf_trend | default('Stable') }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 text-xs">
+    <div class="p-3 bg-panel-2 border border-border rounded-lg">
+      <span class="text-ink-muted">Operating Cash Flow:</span>
+      <p class="font-bold text-ink text-sm mt-0.5">
+        ${{ "{:,.0f}".format(raw_cash.operating_cash_flow) if raw_cash.operating_cash_flow is defined and raw_cash.operating_cash_flow is not none else 'N/A' }}
+      </p>
+    </div>
+    <div class="p-3 bg-panel-2 border border-border rounded-lg">
+      <span class="text-ink-muted">Capital Expenditure (CapEx):</span>
+      <p class="font-bold text-ink text-sm mt-0.5">
+        ${{ "{:,.0f}".format(raw_cash.capital_expenditure) if raw_cash.capital_expenditure is defined and raw_cash.capital_expenditure is not none else 'N/A' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft">
+    <p class="font-medium text-ink mb-1">Cash Quality Assessment</p>
+    <p class="leading-relaxed">{{ raw_cash.data_note | default('Analysis of cash flows relative to reported earnings.') }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% macro roic_wacc_panel(raw_rw) %}
+{% set raw_rw = raw_rw or {} %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between border-b border-border pb-3">
+    <div>
+      <span class="eyebrow">Economic Value Creation (EVA)</span>
+      <h3 class="text-xl font-bold text-ink mt-1">
+        {{ raw_rw.value_creation | default('Value Assessment') }}
+      </h3>
+    </div>
+    <div class="text-right">
+      <span class="eyebrow">Economic Spread (ROIC - WACC)</span>
+      <p class="text-3xl font-extrabold {% if raw_rw.economic_spread and raw_rw.economic_spread > 0 %}text-emerald-400{% else %}text-amber-400{% endif %} mt-0.5">
+        {{ "%+.1f%%"|format(raw_rw.economic_spread * 100) if raw_rw.economic_spread is defined and raw_rw.economic_spread is not none else 'N/A' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Key Spread Rates -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">Return on Invested Capital (ROIC)</span>
+      <p class="text-2xl font-bold text-ink mt-1">
+        {{ "%.1f%%"|format(raw_rw.roic * 100) if raw_rw.roic is defined and raw_rw.roic is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">NOPAT / Operating Invested Capital</p>
+    </div>
+    <div class="p-3 bg-panel border border-border rounded-lg">
+      <span class="eyebrow text-xxs">Cost of Capital (WACC)</span>
+      <p class="text-2xl font-bold text-ink mt-1">
+        {{ "%.1f%%"|format(raw_rw.wacc * 100) if raw_rw.wacc is defined and raw_rw.wacc is not none else 'N/A' }}
+      </p>
+      <p class="text-xxs text-ink-muted mt-1">CAPM Ke ({{ "%.1f%%"|format(raw_rw.cost_of_equity * 100) if raw_rw.cost_of_equity else 'N/A' }}) &middot; Beta: {{ "%.2f"|format(raw_rw.beta) if raw_rw.beta else '1.00' }}</p>
+    </div>
+  </div>
+
+  <!-- Capital Structure Details -->
+  <div class="bg-panel-2 border border-border p-3.5 rounded-lg text-xs space-y-2">
+    <p class="font-medium text-ink">Capital Structure Breakdown</p>
+    <div class="grid grid-cols-2 gap-2 text-ink-soft">
+      <div>Equity Weight: <span class="font-semibold text-ink">{{ "%.1f%%"|format(raw_rw.equity_weight * 100) if raw_rw.equity_weight else 'N/A' }}</span></div>
+      <div>Debt Weight: <span class="font-semibold text-ink">{{ "%.1f%%"|format(raw_rw.debt_weight * 100) if raw_rw.debt_weight else 'N/A' }}</span></div>
+      <div>Pre-Tax Cost of Debt: <span class="font-semibold text-ink">{{ "%.1f%%"|format(raw_rw.pre_tax_cost_of_debt * 100) if raw_rw.pre_tax_cost_of_debt else 'N/A' }}</span></div>
+      <div>After-Tax Cost of Debt: <span class="font-semibold text-ink">{{ "%.1f%%"|format(raw_rw.after_tax_cost_of_debt * 100) if raw_rw.after_tax_cost_of_debt else 'N/A' }}</span></div>
+    </div>
+  </div>
+
+  <div class="text-sm bg-panel-2 border border-border p-3.5 rounded-lg text-ink-soft">
+    <p class="font-medium text-ink mb-1">ROIC vs. WACC Methodology Note</p>
+    <p class="leading-relaxed">{{ raw_rw.data_note | default('Invested capital based on total assets net of non-interest liabilities.') }}</p>
+  </div>
+</div>
+{% endmacro %}
+
+
 {% macro beneish_panel(raw_beneish) %}
+{% set raw_beneish = raw_beneish or {} %}
+{% set m_val = raw_beneish.M_score if raw_beneish.M_score is defined else (raw_beneish.score if raw_beneish.score is defined else none) %}
 <div class="space-y-4">
   <div class="flex items-center justify-between border-b border-border pb-3">
     <div>
@@ -99,7 +301,7 @@
     <div class="text-right">
       <span class="eyebrow">M-Score</span>
       <p class="text-3xl font-extrabold text-accent mt-0.5">
-        {{ "%.2f"|format(raw_beneish.score) if raw_beneish.score is defined else 'N/A' }}
+        {{ "%.2f"|format(m_val) if m_val is not none else 'N/A' }}
       </p>
     </div>
   </div>
@@ -110,15 +312,16 @@
   </div>
 
   <div class="grid grid-cols-2 gap-3 mt-2">
+    {% set indices = raw_beneish.indices if raw_beneish.indices is defined else raw_beneish %}
     {% set items = [
-      ('DSRI', 'Days Sales Rec. Index', '&gt; 1.0 indicates risk', raw_beneish.indices.DSRI),
-      ('GMI', 'Gross Margin Index', '&gt; 1.0 indicates margin decay', raw_beneish.indices.GMI),
-      ('AQI', 'Asset Quality Index', '&gt; 1.0 indicates asset risk', raw_beneish.indices.AQI),
-      ('SGI', 'Sales Growth Index', '&gt; 1.0 indicates growth pressure', raw_beneish.indices.SGI),
-      ('DEPI', 'Depreciation Index', '&gt; 1.0 indicates slower depreciation', raw_beneish.indices.DEPI),
-      ('SGAI', 'SGA Efficiency Index', '&gt; 1.0 indicates efficiency loss', raw_beneish.indices.SGAI),
-      ('LVGI', 'Leverage Index', '&gt; 1.0 indicates debt expansion', raw_beneish.indices.LVGI),
-      ('TATA', 'Accruals to Assets', '&gt; 0.0 indicates accrual earnings', raw_beneish.indices.TATA)
+      ('DSRI', 'Days Sales Rec. Index', '&gt; 1.0 indicates risk', indices.DSRI if indices is defined else none),
+      ('GMI', 'Gross Margin Index', '&gt; 1.0 indicates margin decay', indices.GMI if indices is defined else none),
+      ('AQI', 'Asset Quality Index', '&gt; 1.0 indicates asset risk', indices.AQI if indices is defined else none),
+      ('SGI', 'Sales Growth Index', '&gt; 1.0 indicates growth pressure', indices.SGI if indices is defined else none),
+      ('DEPI', 'Depreciation Index', '&gt; 1.0 indicates slower depreciation', indices.DEPI if indices is defined else none),
+      ('SGAI', 'SGA Efficiency Index', '&gt; 1.0 indicates efficiency loss', indices.SGAI if indices is defined else none),
+      ('LVGI', 'Leverage Index', '&gt; 1.0 indicates debt expansion', indices.LVGI if indices is defined else none),
+      ('TATA', 'Accruals to Assets', '&gt; 0.0 indicates accrual earnings', indices.TATA if indices is defined else none)
     ] %}
     
     {% for key, name, rule, value in items %}

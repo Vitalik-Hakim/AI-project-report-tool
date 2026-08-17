@@ -3,7 +3,7 @@
 {% from "partials/_score_table.html" import score_table %}
 {% from "partials/_risk_factors.html" import risk_factors %}
 {% from "partials/_layout_switcher.html" import layout_switcher %}
-{% from "partials/_details_tabs.html" import altman_panel, piotroski_panel, beneish_panel %}
+{% from "partials/_details_tabs.html" import altman_panel, piotroski_panel, dupont_panel, cash_quality_panel, roic_wacc_panel, beneish_panel %}
 
 {% block title %}{{ company.name }} — Standing Report (Sidebar){% endblock %}
 
@@ -22,9 +22,12 @@
       <a href="#scores" class="text-ink-soft hover:text-accent transition-colors">Summary Scores</a>
       <a href="#agreement" class="text-ink-soft hover:text-accent transition-colors">Agreement Check</a>
       <a href="#ai-brief" class="text-ink-soft hover:text-accent transition-colors">AI Analysis</a>
-      {% if company.raw_altman %}
-      <a href="#calculators" class="text-ink-soft hover:text-accent transition-colors">Detailed Metrics</a>
-      {% endif %}
+      <a href="#dupont" class="text-ink-soft hover:text-accent transition-colors">DuPont ROE</a>
+      <a href="#cash-quality" class="text-ink-soft hover:text-accent transition-colors">Cash Quality</a>
+      <a href="#roic-wacc" class="text-ink-soft hover:text-accent transition-colors">ROIC vs. WACC</a>
+      <a href="#piotroski" class="text-ink-soft hover:text-accent transition-colors">Piotroski Checklist</a>
+      <a href="#altman" class="text-ink-soft hover:text-accent transition-colors">Altman Z-Score</a>
+      <a href="#beneish" class="text-ink-soft hover:text-accent transition-colors">Beneish M-Score</a>
     </nav>
   </aside>
 
@@ -90,30 +93,47 @@
       {% endif %}
     </section>
 
-    <!-- Detailed Calculators (Altman Z, Piotroski F, Beneish M) -->
-    {% if company.raw_altman or company.raw_piotroski or company.raw_beneish %}
-    <section id="calculators" class="scroll-mt-6 p-6 bg-panel-2/10">
+    <!-- Detailed Calculators Section -->
+    {% set raw_details = company.get('raw_details') or {} %}
+    <section class="scroll-mt-6 p-6 bg-panel-2/10 space-y-6">
       <span class="eyebrow">Detailed Calculators Breakdown</span>
       
-      <!-- Altman Z-Score Segment -->
-      <div class="mt-4 bg-panel border border-border rounded-xl p-5 mb-6">
-        <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Altman Z-Score Model</h3>
-        {{ altman_panel(company.raw_altman) }}
+      <!-- DuPont Segment -->
+      <div id="dupont" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-ink mb-3 font-mono">DuPont 3-Step ROE Analysis</h3>
+        {{ dupont_panel(raw_details.get('dupont') or company.get('raw_dupont')) }}
+      </div>
+
+      <!-- Cash Quality Segment -->
+      <div id="cash-quality" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Cash Flow Quality & Conversion</h3>
+        {{ cash_quality_panel(raw_details.get('cash_quality') or company.get('raw_cash_quality')) }}
+      </div>
+
+      <!-- ROIC vs WACC Segment -->
+      <div id="roic-wacc" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Economic Value Added (ROIC vs. WACC)</h3>
+        {{ roic_wacc_panel(raw_details.get('roic_wacc') or company.get('raw_roic_wacc')) }}
       </div>
       
       <!-- Piotroski F-Score Segment -->
-      <div class="bg-panel border border-border rounded-xl p-5 mb-6">
+      <div id="piotroski" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
         <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Piotroski 9-Rule Checklist</h3>
-        {{ piotroski_panel(company.raw_piotroski) }}
+        {{ piotroski_panel(raw_details.get('piotroski') or company.get('raw_piotroski')) }}
+      </div>
+
+      <!-- Altman Z-Score Segment -->
+      <div id="altman" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Altman Z-Score Solvency Model</h3>
+        {{ altman_panel(raw_details.get('altman') or company.get('raw_altman')) }}
       </div>
       
       <!-- Beneish M-Score Segment -->
-      <div class="bg-panel border border-border rounded-xl p-5">
+      <div id="beneish" class="scroll-mt-6 bg-panel border border-border rounded-xl p-5">
         <h3 class="text-sm font-semibold text-ink mb-3 font-mono">Beneish Earnings Quality Indices</h3>
-        {{ beneish_panel(company.raw_beneish) }}
+        {{ beneish_panel(raw_details.get('beneish') or company.get('raw_beneish')) }}
       </div>
     </section>
-    {% endif %}
   </div>
 </div>
 {% endblock %}

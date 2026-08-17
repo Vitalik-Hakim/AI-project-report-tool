@@ -11,7 +11,7 @@
   
   <span class="eyebrow">Analyze New Company</span>
   <p class="text-xs text-ink-soft mt-1 mb-4 leading-relaxed">
-    Enter any US stock ticker. Our system will extract Yahoo Finance balance sheets, run Altman Z, Piotroski F, and Beneish M checks, compute RF bankruptcy probability, and draft a Mistral-powered analysis.
+    Enter any public stock ticker. The engine extracts financial statements via Yahoo Finance, executes the 6-pillar fundamental suite (DuPont ROE, Cash Quality, ROIC vs. WACC, Piotroski F-Score, Altman Z-Score, and Beneish M-Score), evaluates calibrated ML distress risk, detects agreement/divergence, and generates an analyst standing report.
   </p>
   
   <form action="{{ url_for('analyze') }}" method="POST" class="flex flex-col sm:flex-row gap-3">

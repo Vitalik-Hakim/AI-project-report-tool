@@ -1,108 +1,115 @@
-# Standing Report
+# Standing Report Dashboard
+### Interactive Financial Analysis & Due Diligence UI
 
-Flask + Jinja + Tailwind CSS v4. Renders the AI Company Standing Report in
-all three wireframe layout directions (linear scroll, compact cards,
-sidebar nav) from one shared data shape and one shared set of Jinja
-partials, so switching layouts or plugging in the real backend doesn't
-mean rewriting markup.
+**CS 254: Introduction to Artificial Intelligence — Final Project**  
+*Ashesi University, Department of Computer Science — May–August 2026*
 
-## Setup
+---
 
+## 1. Project Overview
+
+The **Standing Report Dashboard** is a Flask + Jinja + Tailwind CSS v4 web application designed for private equity (PE) and mergers & acquisitions (M&A) target screening. It renders multi-pillar deterministic financial metrics, supervised ML distress probabilities, and AI-generated standing briefs across three distinct viewing layouts (Linear Scroll, Compact Cards, and Sidebar Navigation) using a unified data contract.
+
+---
+
+## 2. Team Members
+
+* **Abdul Hakim Aremeyaw** — Software Engineering, Frontend Architecture & Full-Stack Deployment
+* **Haris Tiyumtaba Issah** — Data Engineering, Feature Selection & Supervised ML Classifier
+* **Samira Ewura-Esi Donkoh** — Financial Framework Research, Ethics Audit & Final Report Lead
+* **Vincent Adijore Chanayire** — Rule-Based Financial Engines, Pipeline Integration & Presentation Lead
+
+---
+
+## 3. Key Features
+
+* **Real-Time Live Analysis (`/analyze`)**: Enter any public ticker symbol (e.g. `AAPL`, `MSFT`, `CAT`, `XOM`) to trigger the live Python extraction and scoring pipeline.
+* **Interactive 6-Pillar Calculators**:
+  1. **DuPont 3-Step ROE Decomposition** (Net Margin &times; Asset Turnover &times; Equity Multiplier with operational vs. leverage driver detection).
+  2. **Cash Quality Engine** (Operating Cash Flow, CapEx, Free Cash Flow, Cash Conversion $OCF/NI$, and FCF Conversion trend).
+  3. **ROIC vs. WACC Economic Spread** (NOPAT, Invested Capital, CAPM Cost of Capital, Capital Structure weights, and Value Creation meter).
+  4. **Piotroski F-Score 9-Rule Checklist** (Pass/fail breakdown across profitability, leverage, and efficiency).
+  5. **Altman Z-Score Solvency Meter** (Safe, Grey, and Distress zone gauge).
+  6. **Beneish M-Score Earnings Quality Screen** (8 forensic manipulation risk indices).
+* **Calibrated ML Distress Read**: Displays calibrated Random Forest distress probability ($P(\text{distress})$) alongside composite rule confidence.
+* **Agreement & Divergence Banner**: Highlights consensus or divergence points with neutral, non-judgmental explanations and recommended diligence next steps.
+* **Layout Switcher**: Dynamically toggle between **Linear**, **Compact**, and **Sidebar** views for any company standing report.
+
+---
+
+## 4. Setup & Installation
+
+### Step 1: Install Python Dependencies
 ```bash
-# Python
+# In the AI-project-report-tool directory
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate    # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-
-# CSS (Tailwind v4, CSS-first config — no tailwind.config.js needed)
-npm install
-npm run build:css      # one-off build
-# or
-npm run watch:css      # rebuild on save while developing
 ```
 
-## Run
+### Step 2: Build Tailwind CSS
+```bash
+npm install
+npm run build:css      # Compile CSS to app/static/css/output.css
+# or for live watch during development:
+npm run watch:css
+```
+
+---
+
+## 5. Running the Application
 
 ```bash
 python run.py
 ```
 
-Then open `http://127.0.0.1:5000`.
+Then open your browser at **`http://127.0.0.1:5001`**.
 
-- `/` — portfolio list
-- `/report/<company_id>?layout=linear|compact|sidebar` — report detail.
-  Every report page has a Linear / Compact / Sidebar switcher at the top
-  so you can flip between the three directions for the same company —
-  useful when the team is comparing them.
+### Available Routes:
+* **`/`** — Portfolio overview and company search bar.
+* **`/report/<company_id>?layout=linear|compact|sidebar`** — Detailed standing report with interactive layout switcher.
+* **`/methodology`** — Comprehensive architectural and mathematical methodology guide.
+* **`/api/analyze/<ticker>`** — JSON API endpoint running the live end-to-end backend analysis pipeline.
 
-Company ids in the mock data: `mrdn`, `vig`, `crsr`, `hldm`.
+---
 
-## The data contract
-
-Everything the templates render comes from the shape in
-`app/data/mock_reports.json` (one object per company: `rule_based`,
-`trained_model`, `agreement`, `valuation_standing`, `risk_factors`,
-`conclusion`). `load_companies()` in `app/__init__.py` is the single
-place that loads this data — right now it reads the JSON fixture; once
-the AI backend exists, that function is the only thing that needs to
-change (swap it for an API call or DB query returning the same shape).
-No template or partial should need to change.
-
-Fields with reference to the schema:
-
-```jsonc
-{
-  "id": "mrdn",
-  "name": "Meridian Foods Corp",
-  "ticker": "MRDN",
-  "sector": "Packaged Foods",
-  "fiscal_year": "FY2025",
-  "generated_at": "Jul 31, 2026",
-  "business_overview": "...",
-  "rule_based": {
-    "composite_confidence": 86,
-    "confidence_label": "High",
-    "metrics": [
-      { "name": "Piotroski F-Score", "result": "7 / 9", "flag": "good" }
-      // flag: "good" | "neutral" | "warn" — colors the row's status dot
-    ]
-  },
-  "trained_model": {
-    "distress_probability": 11,
-    "model_confidence": 89,
-    "confidence_label": "High"
-  },
-  "agreement": {
-    "status": "agreement",     // or "divergence"
-    "gap_points": 3,
-    "explanation": "...",
-    "next_step": null          // shown only for divergence, otherwise null
-  },
-  "valuation_standing": "...",
-  "risk_factors": ["...", "..."],
-  "conclusion": "..."
-}
-```
-
-## Structure
+## 6. Directory Structure
 
 ```
-app/
-  __init__.py              # app factory + routes + load_companies()
-  data/mock_reports.json   # fixture — swap for real backend later
-  templates/
-    base.html
-    portfolio.html          # company list
-    report_linear.html      # layout 1a
-    report_compact.html     # layout 1b
-    report_sidebar.html     # layout 1c
-    partials/
-      _badges.html          # confidence_badge(), status_pill()
-      _status_banner.html   # status_banner() — agreement/divergence box
-      _score_table.html     # score_table() — rule-based metrics table
-      _risk_factors.html    # risk_factors()
-      _layout_switcher.html # Linear/Compact/Sidebar links
-  static/css/
-    input.css               # Tailwind v4 theme tokens (@theme block)
-    output.css               # built (gitignored in a real repo)
+AI-project-report-tool/
+├── app/
+│   ├── __init__.py              # Flask app factory, routing, & backend integration
+│   ├── data/
+│   │   ├── mock_reports.json    # Seed database fixture
+│   │   └── reports.json         # Persisted live reports database
+│   ├── static/
+│   │   └── css/
+│   │       ├── input.css        # Tailwind CSS v4 design tokens & base themes
+│   │       └── output.css       # Compiled, minified CSS stylesheet
+│   └── templates/
+│       ├── base.html            # Core layout wrapper
+│       ├── portfolio.html       # Portfolio listing and ticker search card
+│       ├── report_linear.html   # Layout 1: Linear scroll view
+│       ├── report_compact.html  # Layout 2: Compact summary cards
+│       ├── report_sidebar.html  # Layout 3: Left-navigation sidebar view
+│       ├── loading.html         # Live asynchronous analysis loading screen
+│       ├── methodology.html     # Technical methodology & formulas guide
+│       └── partials/
+│           ├── _badges.html          # Confidence & status badge macros
+│           ├── _details_tabs.html    # 6 interactive calculator panel macros
+│           ├── _layout_switcher.html # View switcher widget
+│           ├── _risk_factors.html    # Risk factor list macro
+│           ├── _score_table.html     # Summary metrics table macro
+│           └── _status_banner.html   # Agreement / divergence banner macro
+├── package.json                 # Tailwind CSS v4 build script config
+├── package-lock.json            # Node dependency lockfile
+├── requirements.txt             # Python dependencies
+├── run.py                       # Application entry point
+└── README.md                    # Documentation & setup guide
 ```
+
+---
+
+## 7. Academic Integrity & Citations
+
+Developed as part of the CS 254 Introduction to AI curriculum at Ashesi University. All metrics are cited from original foundational literature (Altman 1968, Piotroski 2000, Beneish 1999, DuPont 1961, Sharpe 1964).

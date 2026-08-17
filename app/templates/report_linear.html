@@ -3,7 +3,7 @@
 {% from "partials/_score_table.html" import score_table %}
 {% from "partials/_risk_factors.html" import risk_factors %}
 {% from "partials/_layout_switcher.html" import layout_switcher %}
-{% from "partials/_details_tabs.html" import altman_panel, piotroski_panel, beneish_panel %}
+{% from "partials/_details_tabs.html" import altman_panel, piotroski_panel, dupont_panel, cash_quality_panel, roic_wacc_panel, beneish_panel %}
 
 {% block title %}{{ company.name }} — Standing Report{% endblock %}
 
@@ -15,7 +15,7 @@
 
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
   <h1 class="text-3xl font-semibold text-ink">
-    {{ company.name }} <span class="text-ink-muted font-normal">({{ company.ticker }})</span>
+    {{ company.name }} <span class="text-ink-muted font-normal font-mono">({{ company.ticker }})</span>
   </h1>
   <span class="text-sm text-ink-muted whitespace-nowrap">Generated {{ company.generated_at }} &middot; {{ company.fiscal_year }}</span>
 </div>
@@ -36,7 +36,7 @@
     <div class="mt-3">{{ score_table(company.rule_based) }}</div>
   </div>
   <div class="panel p-5">
-    <span class="eyebrow">Trained Model</span>
+    <span class="eyebrow">Trained ML Model</span>
     <p class="text-sm text-ink-muted mt-4">Distress probability</p>
     <p class="text-3xl font-semibold text-ink mt-1">{{ company.trained_model.distress_probability }}%</p>
     <p class="text-sm text-ink-muted mt-5">Model confidence</p>
@@ -79,33 +79,51 @@
 {% endif %}
 
 <!-- Detailed Calculations Section -->
-{% if company.raw_altman or company.raw_piotroski or company.raw_beneish %}
+{% set raw_details = company.get('raw_details') or {} %}
 <section class="mb-8">
-  <span class="eyebrow">Detailed Calculators</span>
+  <span class="eyebrow">Detailed Calculators & Breakdowns</span>
   <div class="panel overflow-hidden mt-3">
     <!-- Tabs Header -->
     <div class="flex border-b border-border bg-panel-2/50 text-sm overflow-x-auto scrollbar-none">
-      <button onclick="switchTab('altman')" id="tab-btn-altman" class="tab-btn px-5 py-3.5 border-b-2 border-accent text-ink hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
-        Altman Z-Score
+      <button onclick="switchTab('dupont')" id="tab-btn-dupont" class="tab-btn px-5 py-3.5 border-b-2 border-accent text-ink hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
+        DuPont ROE
+      </button>
+      <button onclick="switchTab('cash')" id="tab-btn-cash" class="tab-btn px-5 py-3.5 border-b-2 border-transparent text-ink-soft hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
+        Cash Quality
+      </button>
+      <button onclick="switchTab('roic')" id="tab-btn-roic" class="tab-btn px-5 py-3.5 border-b-2 border-transparent text-ink-soft hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
+        ROIC vs. WACC
       </button>
       <button onclick="switchTab('piotroski')" id="tab-btn-piotroski" class="tab-btn px-5 py-3.5 border-b-2 border-transparent text-ink-soft hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
-        Piotroski F-Score Checklist
+        Piotroski F-Score
+      </button>
+      <button onclick="switchTab('altman')" id="tab-btn-altman" class="tab-btn px-5 py-3.5 border-b-2 border-transparent text-ink-soft hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
+        Altman Z-Score
       </button>
       <button onclick="switchTab('beneish')" id="tab-btn-beneish" class="tab-btn px-5 py-3.5 border-b-2 border-transparent text-ink-soft hover:text-ink cursor-pointer focus:outline-none transition-all font-medium whitespace-nowrap">
-        Beneish M-Score Indices
+        Beneish M-Score
       </button>
     </div>
     
     <!-- Tabs Content -->
     <div class="p-6">
-      <div id="tab-content-altman" class="tab-pane">
-        {{ altman_panel(company.raw_altman) }}
+      <div id="tab-content-dupont" class="tab-pane">
+        {{ dupont_panel(raw_details.get('dupont') or company.get('raw_dupont')) }}
+      </div>
+      <div id="tab-content-cash" class="tab-pane hidden">
+        {{ cash_quality_panel(raw_details.get('cash_quality') or company.get('raw_cash_quality')) }}
+      </div>
+      <div id="tab-content-roic" class="tab-pane hidden">
+        {{ roic_wacc_panel(raw_details.get('roic_wacc') or company.get('raw_roic_wacc')) }}
       </div>
       <div id="tab-content-piotroski" class="tab-pane hidden">
-        {{ piotroski_panel(company.raw_piotroski) }}
+        {{ piotroski_panel(raw_details.get('piotroski') or company.get('raw_piotroski')) }}
+      </div>
+      <div id="tab-content-altman" class="tab-pane hidden">
+        {{ altman_panel(raw_details.get('altman') or company.get('raw_altman')) }}
       </div>
       <div id="tab-content-beneish" class="tab-pane hidden">
-        {{ beneish_panel(company.raw_beneish) }}
+        {{ beneish_panel(raw_details.get('beneish') or company.get('raw_beneish')) }}
       </div>
     </div>
   </div>
@@ -119,12 +137,14 @@
       el.classList.add('border-transparent', 'text-ink-soft');
     });
     
-    document.getElementById('tab-content-' + tabId).classList.remove('hidden');
+    const targetContent = document.getElementById('tab-content-' + tabId);
+    if (targetContent) targetContent.classList.remove('hidden');
     
     const activeBtn = document.getElementById('tab-btn-' + tabId);
-    activeBtn.classList.remove('border-transparent', 'text-ink-soft');
-    activeBtn.classList.add('border-accent', 'text-ink');
+    if (activeBtn) {
+      activeBtn.classList.remove('border-transparent', 'text-ink-soft');
+      activeBtn.classList.add('border-accent', 'text-ink');
+    }
   }
 </script>
-{% endif %}
 {% endblock %}

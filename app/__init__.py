@@ -5,13 +5,18 @@ from pathlib import Path
 from flask import Flask, render_template, request, abort, redirect, url_for, jsonify
 from dotenv import load_dotenv
 
-# Add backend directory to sys.path
-intro_to_ai_path = Path(__file__).resolve().parent.parent.parent / "intro-to-ai-project"
-if str(intro_to_ai_path) not in sys.path:
-    sys.path.append(str(intro_to_ai_path))
+# Add backend directory to sys.path with fallback resolution
+possible_backend_paths = [
+    Path(__file__).resolve().parent.parent.parent / "intro-to-ai-project",
+    Path(__file__).resolve().parent.parent / "intro-to-ai-project",
+    Path("/Users/vincentchanayire/Downloads/intro-to-ai-project"),
+]
 
-# Load .env file from the backend directory
-load_dotenv(intro_to_ai_path / ".env")
+for p in possible_backend_paths:
+    if p.exists() and str(p) not in sys.path:
+        sys.path.append(str(p))
+        load_dotenv(p / ".env")
+        break
 
 DATA_PATH = Path(__file__).parent / "data" / "reports.json"
 MOCK_DATA_PATH = Path(__file__).parent / "data" / "mock_reports.json"
