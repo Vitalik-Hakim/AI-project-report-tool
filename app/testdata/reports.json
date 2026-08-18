@@ -951,10 +951,10 @@
       "ticker": "AMC",
       "sector": "Communication Services",
       "fiscal_year": "FY2025",
-      "generated_at": "Aug 17, 2026",
+      "generated_at": "Aug 18, 2026",
       "business_overview": "AMC Entertainment Holdings, Inc. engages in the theatrical exhibition business in the United States and internationally. It owns, operates, or has interests in theatres. The company was founded in 1920 and is headquartered in Leawood, Kansas.",
       "rule_based": {
-        "composite_confidence": 47,
+        "composite_confidence": 51,
         "confidence_label": "Low",
         "metrics": [
           {
@@ -966,6 +966,21 @@
             "name": "Altman Z-Score",
             "result": "-1.11 (Distress Zone)",
             "flag": "warn"
+          },
+          {
+            "name": "DuPont ROE",
+            "result": "33.4% (Balanced)",
+            "flag": "good"
+          },
+          {
+            "name": "ROIC vs WACC",
+            "result": "ROIC -1.3% vs WACC 11.9% (Spread -13.3%)",
+            "flag": "warn"
+          },
+          {
+            "name": "Cash Quality",
+            "result": "Watch (FCF Conversion 58%)",
+            "flag": "neutral"
           },
           {
             "name": "Beneish M-Score",
@@ -981,46 +996,246 @@
       },
       "agreement": {
         "status": "divergence",
-        "gap_points": 41,
-        "explanation": "Divergence driven by a 41-point gap between rule-based confidence (47%) and trained model confidence (88%). Analyst review is recommended.",
-        "next_step": "Examine cash flows and capex financing terms in detail."
+        "gap_points": 37,
+        "explanation": "Divergence detected: 37-point gap between rule-based confidence (51%) and trained model confidence (88%). The signals differ primarily due to spread pressure below cost of capital. Analyst review is recommended.",
+        "next_step": "Perform line-item cash flow and debt covenant audit."
       },
-      "valuation_standing": "**Key Strengths**\nThe Beneish M-Score\u2019s strong negative value (-2.82) provides reassurance that AMC\u2019s reported earnings are unlikely to be artificially inflated. Additionally, the Piotroski analysis flags three positive signals: **cash flow exceeding net income** (a potential sign of conservative accounting), **improving gross margins** (rising from 66.7% in 2024 to 66.9% in 2025), and **higher asset turnover** (revenues grew while total assets shrank). These factors hint at modest operational efficiencies despite broader challenges.",
-      "risk_factors": [
-        "**Potential Concerns**\nThe most alarming signals come from the Altman Z-Score and persistent losses.",
-        "AMC\u2019s **net income worsened to -$632M in 2025** (vs.",
-        "-$353M in 2024), and **operating cash flow remained negative** (-$120M), raising liquidity concerns."
-      ],
-      "conclusion": "**Potential Concerns**\nThe most alarming signals come from the Altman Z-Score and persistent losses. AMC\u2019s **net income worsened to -$632M in 2025** (vs. -$353M in 2024), and **operating cash flow remained negative** (-$120M), raising liquidity concerns. The Piotroski score also highlights **rising leverage** (long-term debt held steady at ~$4B while assets declined) and a **deteriorating current ratio** (current assets fell 23% while liabilities grew). The bankruptcy probability, while not dire, reflects these pressures. No conflicting external data is present, but the combined indicators suggest AMC\u2019s financial resilience is under strain.",
-      "raw_altman": {
-        "z_score": -1.1108046061312664,
-        "classification": "Distress Zone",
-        "backtracked": false,
-        "data_note": "Complete data was available for 2025."
-      },
-      "raw_piotroski": {
-        "score": 3,
-        "classification": "Weak",
-        "signals": {
-          "positive_net_income": 0,
-          "positive_operating_cash_flow": 0,
-          "improving_roa": 0,
-          "cash_flow_greater_than_net_income": 1,
-          "lower_leverage": 0,
-          "improving_current_ratio": 0,
-          "no_new_shares": 0,
-          "improving_gross_margin": 1,
-          "improving_asset_turnover": 1
+      "valuation_standing": "AMC\u2019s 2025 financial profile presents a mixed but concerning picture for PE/M&A screening, characterized by weak stability signals, value destruction, and divergent risk assessments. The supervised ML classifier assigns a **12.4% bankruptcy probability**, while the **Altman Z-Score (-1.11)** firmly places the company in the *Distress Zone*, underscoring acute financial stress. However, the **Beneish M-Score (-2.82)** suggests earnings manipulation is unlikely, and the **Piotroski F-Score (3/9, \"Weak\")** reflects operational fragility. The discrepancy between the ML model\u2019s moderate distress signal and the Altman Z-Score\u2019s severe classification warrants closer scrutiny, particularly around liquidity and leverage dynamics.",
+      "conclusion": "Core strengths are limited but notable. Despite a **negative net income (-$632M)** and **negative operating cash flow (-$120M)**, AMC\u2019s **DuPont ROE (33.4%)** appears strong, driven by an extreme **equity multiplier (-4.23x)**\u2014a red flag indicating heavy reliance on debt rather than organic profitability. The **gross margin improved (67% vs. 66.7% in 2024)**, and **asset turnover rose (0.60x vs. 0.56x)**, signaling modest operational efficiency gains. However, **ROIC (-1.3%)** significantly trails **WACC (11.9%)**, confirming the company is **destroying economic value**. Cash quality is also a concern, with **free cash flow (-$366M)** and a **declining FCF conversion ratio (57.9%)**, though the **cash conversion ratio (18.9%)** remains moderate.",
+      "raw_details": {
+        "altman": {
+          "ticker": "AMC",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "Complete data was available for 2025.",
+          "altman_z_score": -1.1108046061312664,
+          "altman_classification": "Distress Zone",
+          "data": {
+            "ticker": {
+              "0": "AMC",
+              "1": "AMC",
+              "2": "AMC",
+              "3": "AMC",
+              "4": "AMC"
+            },
+            "year": {
+              "0": 2025,
+              "1": 2024,
+              "2": 2023,
+              "3": 2022,
+              "4": 2021
+            },
+            "statement_date": {
+              "0": "2025-12-31T00:00:00",
+              "1": "2024-12-31T00:00:00",
+              "2": "2023-12-31T00:00:00",
+              "3": "2022-12-31T00:00:00",
+              "4": "2021-12-31T00:00:00"
+            },
+            "Current Assets": {
+              "0": 730500000.0,
+              "1": 947200000.0,
+              "2": 1203100000.0,
+              "3": 902100000.0,
+              "4": null
+            },
+            "Cost of Goods Sold": {
+              "0": 1602200000.0,
+              "1": 1544800000.0,
+              "2": 1606400000.0,
+              "3": 1280300000.0,
+              "4": null
+            },
+            "Depreciation and Amortization": {
+              "0": 313400000.0,
+              "1": 319500000.0,
+              "2": 365000000.0,
+              "3": 396000000.0,
+              "4": null
+            },
+            "EBITDA": {
+              "0": 215700000.0,
+              "1": 412700000.0,
+              "2": 383000000.0,
+              "3": -196400000.0,
+              "4": null
+            },
+            "Inventory": {
+              "0": 42600000.0,
+              "1": 51200000.0,
+              "2": 39500000.0,
+              "3": 36400000.0,
+              "4": null
+            },
+            "Net Income": {
+              "0": -632400000.0,
+              "1": -352600000.0,
+              "2": -396600000.0,
+              "3": -973600000.0,
+              "4": null
+            },
+            "Total Receivables": {
+              "0": 157300000.0,
+              "1": 169500000.0,
+              "2": 205200000.0,
+              "3": 167600000.0,
+              "4": null
+            },
+            "Net Sales": {
+              "0": 4848900000.0,
+              "1": 4637200000.0,
+              "2": 4812600000.0,
+              "3": 3911400000.0,
+              "4": null
+            },
+            "Total Assets": {
+              "0": 8017800000.0,
+              "1": 8247500000.0,
+              "2": 9009200000.0,
+              "3": 9135600000.0,
+              "4": null
+            },
+            "Total Long-term Debt": {
+              "0": 4018600000.0,
+              "1": 4010900000.0,
+              "2": 4552300000.0,
+              "3": 5120800000.0,
+              "4": null
+            },
+            "EBIT": {
+              "0": -97700000.0,
+              "1": 93200000.0,
+              "2": 18000000.0,
+              "3": -592400000.0,
+              "4": null
+            },
+            "Gross Profit": {
+              "0": 3246700000.0,
+              "1": 3092400000.0,
+              "2": 3206200000.0,
+              "3": 2631100000.0,
+              "4": null
+            },
+            "Total Current Liabilities": {
+              "0": 1772300000.0,
+              "1": 1744800000.0,
+              "2": 1632400000.0,
+              "3": 1690300000.0,
+              "4": null
+            },
+            "Retained Earnings": {
+              "0": -8979200000.0,
+              "1": -8346800000.0,
+              "2": -7994200000.0,
+              "3": -7597600000.0,
+              "4": null
+            },
+            "Total Revenue": {
+              "0": 4848900000.0,
+              "1": 4637200000.0,
+              "2": 4812600000.0,
+              "3": 3911400000.0,
+              "4": null
+            },
+            "Total Liabilities": {
+              "0": 9912600000.0,
+              "1": 10008000000.0,
+              "2": 10857100000.0,
+              "3": 11760100000.0,
+              "4": null
+            },
+            "Total Operating Expenses": {
+              "0": 3206200000.0,
+              "1": 3099200000.0,
+              "2": 3167100000.0,
+              "3": 2992200000.0,
+              "4": null
+            },
+            "Market Value": {
+              "0": 800191927.369134,
+              "1": 1518254619.115982,
+              "2": 1517490691.6236877,
+              "3": null,
+              "4": null
+            }
+          }
         },
-        "backtracked": false,
-        "data_note": "Calculation uses requested year 2025 and previous year 2024."
-      },
-      "raw_beneish": {
-        "score": -2.82179982677712,
-        "interpretation": "Unlikely to be manipulating earnings",
-        "backtracked": false,
-        "data_note": "Calculation uses requested year 2025 and previous year 2024.",
-        "indices": {
+        "piotroski": {
+          "ticker": "AMC",
+          "requested_year": 2025,
+          "current_year": 2025,
+          "previous_year": 2024,
+          "backtracked": 0,
+          "data_note": "Calculation uses requested year 2025 and previous year 2024.",
+          "piotroski_score": 3,
+          "classification": "Weak",
+          "signals": {
+            "positive_net_income": 0,
+            "positive_operating_cash_flow": 0,
+            "improving_roa": 0,
+            "cash_flow_greater_than_net_income": 1,
+            "lower_leverage": 0,
+            "improving_current_ratio": 0,
+            "no_new_shares": 0,
+            "improving_gross_margin": 1,
+            "improving_asset_turnover": 1
+          },
+          "data": {
+            "ticker": {
+              "0": "AMC",
+              "1": "AMC"
+            },
+            "year": {
+              "0": 2025,
+              "1": 2024
+            },
+            "statement_date": {
+              "0": "2025-12-31T00:00:00",
+              "1": "2024-12-31T00:00:00"
+            },
+            "net_income": {
+              "0": -632400000.0,
+              "1": -352600000.0
+            },
+            "operating_cash_flow": {
+              "0": -119800000.0,
+              "1": -50800000.0
+            },
+            "total_assets": {
+              "0": 8017800000.0,
+              "1": 8247500000.0
+            },
+            "current_assets": {
+              "0": 730500000.0,
+              "1": 947200000.0
+            },
+            "current_liabilities": {
+              "0": 1772300000.0,
+              "1": 1744800000.0
+            },
+            "long_term_debt": {
+              "0": 4018600000.0,
+              "1": 4010900000.0
+            },
+            "gross_profit": {
+              "0": 3246700000.0,
+              "1": 3092400000.0
+            },
+            "total_revenue": {
+              "0": 4848900000.0,
+              "1": 4637200000.0
+            },
+            "shares_outstanding": {
+              "0": 512943562.0,
+              "1": 381471008.0
+            }
+          }
+        },
+        "beneish": {
+          "ticker": "AMC",
+          "current_year": 2025,
+          "previous_year": 2024,
           "DSRI": 0.8875066576849137,
           "GMI": 0.9959577239594117,
           "AQI": 1.0824228432992895,
@@ -1028,14 +1243,95 @@
           "DEPI": 0.9873364745663283,
           "SGAI": 0.9893583100395661,
           "LVGI": 1.0349396396811594,
-          "TATA": -0.06393274963206864
+          "TATA": -0.06393274963206864,
+          "M_score": -2.82179982677712,
+          "interpretation": "Unlikely to be manipulating earnings",
+          "backtracked": 0,
+          "data_note": "Calculation uses requested year 2025 and previous year 2024.",
+          "data": {
+            "ticker": "AMC",
+            "year": 2024,
+            "statement_date": "2024-12-31T00:00:00",
+            "receivables": 169500000.0,
+            "revenue": 4637200000.0,
+            "cogs": 1544800000.0,
+            "gross_profit": 3092400000.0,
+            "current_assets": 947200000.0,
+            "total_assets": 8247500000.0,
+            "ppe": 4662400000.0,
+            "depreciation": 319500000.0,
+            "operating_expenses": 3099200000.0,
+            "current_liabilities": 1744800000.0,
+            "long_term_debt": 4010900000.0,
+            "net_income": -352600000.0,
+            "operating_cash_flow": -50800000.0
+          }
+        },
+        "dupont": {
+          "ticker": "AMC",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "DuPont calculation uses requested year 2025.",
+          "profit_margin": -0.13042133267338984,
+          "asset_turnover": 0.604766893661603,
+          "equity_multiplier": -4.2314756174794175,
+          "roe": 0.33375554148195063,
+          "primary_driver": "Balanced",
+          "classification": "High Quality / Strong Return",
+          "trend": {
+            "previous_year": 2024,
+            "previous_profit_margin": -0.07603726386612611,
+            "previous_asset_turnover": 0.5622552288572294,
+            "previous_equity_multiplier": -4.684748650951434,
+            "previous_roe": 0.20028401022436804,
+            "roe_change": 0.1334715312575826
+          }
+        },
+        "cash_quality": {
+          "ticker": "AMC",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "Cash quality calculation uses requested year 2025.",
+          "operating_cash_flow": -119800000.0,
+          "capital_expenditure": 246100000.0,
+          "free_cash_flow": -365900000.0,
+          "cash_conversion_ratio": 0.1894370651486401,
+          "fcf_conversion_ratio": 0.5785895003162556,
+          "fcf_trend": "Declining",
+          "conversion_level": "Moderate",
+          "overall_cash_quality": "Watch"
+        },
+        "roic_wacc": {
+          "ticker": "AMC",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "ROIC/WACC calculation uses requested year 2025.",
+          "nopat": -77183000.0,
+          "invested_capital": 5817000000.0,
+          "roic": -0.013268523293794052,
+          "beta": 2.216,
+          "risk_free_rate": 0.0425,
+          "market_risk_premium": 0.055,
+          "cost_of_equity": 0.16438000000000003,
+          "pre_tax_cost_of_debt": 0.12,
+          "after_tax_cost_of_debt": 0.0948,
+          "equity_weight": 0.35147839609510223,
+          "debt_weight": 0.6485216039048978,
+          "wacc": 0.11925586680029722,
+          "economic_spread": -0.13252439009409128,
+          "value_creation": "Destroying Value"
         }
       },
       "llm_report_paragraphs": [
-        "**Overall Assessment**\nAMC\u2019s financial analysis for 2025 presents a mixed but concerning picture. The company\u2019s Altman Z-Score of **-1.11** places it firmly in the *Distress Zone*, signaling elevated financial stress. Meanwhile, the bankruptcy probability model estimates a **12.4% chance of default** for 2025, a notable but not extreme risk. The Piotroski F-Score of **3 out of 9** (\"Weak\") further underscores operational and financial fragility, while the Beneish M-Score of **-2.82** suggests earnings manipulation is unlikely. All metrics use 2025 data without backtracking, ensuring consistency in the assessment.",
-        "**Key Strengths**\nThe Beneish M-Score\u2019s strong negative value (-2.82) provides reassurance that AMC\u2019s reported earnings are unlikely to be artificially inflated. Additionally, the Piotroski analysis flags three positive signals: **cash flow exceeding net income** (a potential sign of conservative accounting), **improving gross margins** (rising from 66.7% in 2024 to 66.9% in 2025), and **higher asset turnover** (revenues grew while total assets shrank). These factors hint at modest operational efficiencies despite broader challenges.",
-        "**Potential Concerns**\nThe most alarming signals come from the Altman Z-Score and persistent losses. AMC\u2019s **net income worsened to -$632M in 2025** (vs. -$353M in 2024), and **operating cash flow remained negative** (-$120M), raising liquidity concerns. The Piotroski score also highlights **rising leverage** (long-term debt held steady at ~$4B while assets declined) and a **deteriorating current ratio** (current assets fell 23% while liabilities grew). The bankruptcy probability, while not dire, reflects these pressures. No conflicting external data is present, but the combined indicators suggest AMC\u2019s financial resilience is under strain."
-      ]
+        "**Preliminary Standing Report: AMC (Fiscal Year 2025)**",
+        "AMC\u2019s 2025 financial profile presents a mixed but concerning picture for PE/M&A screening, characterized by weak stability signals, value destruction, and divergent risk assessments. The supervised ML classifier assigns a **12.4% bankruptcy probability**, while the **Altman Z-Score (-1.11)** firmly places the company in the *Distress Zone*, underscoring acute financial stress. However, the **Beneish M-Score (-2.82)** suggests earnings manipulation is unlikely, and the **Piotroski F-Score (3/9, \"Weak\")** reflects operational fragility. The discrepancy between the ML model\u2019s moderate distress signal and the Altman Z-Score\u2019s severe classification warrants closer scrutiny, particularly around liquidity and leverage dynamics.",
+        "Core strengths are limited but notable. Despite a **negative net income (-$632M)** and **negative operating cash flow (-$120M)**, AMC\u2019s **DuPont ROE (33.4%)** appears strong, driven by an extreme **equity multiplier (-4.23x)**\u2014a red flag indicating heavy reliance on debt rather than organic profitability. The **gross margin improved (67% vs. 66.7% in 2024)**, and **asset turnover rose (0.60x vs. 0.56x)**, signaling modest operational efficiency gains. However, **ROIC (-1.3%)** significantly trails **WACC (11.9%)**, confirming the company is **destroying economic value**. Cash quality is also a concern, with **free cash flow (-$366M)** and a **declining FCF conversion ratio (57.9%)**, though the **cash conversion ratio (18.9%)** remains moderate.",
+        "Key risks dominate the outlook. **Leverage is elevated**, with **total liabilities ($9.9B) exceeding assets ($8.0B)** and **retained earnings deeply negative (-$9.0B)**. The **Piotroski F-Score flags deteriorating liquidity (current ratio decline)**, rising shares outstanding, and persistent losses. While the **Beneish M-Score alleviates earnings manipulation concerns**, the **Altman Z-Score\u2019s distress classification** and **negative economic spread** highlight solvency risks. Further due diligence should prioritize **debt sustainability, cost restructuring, and revenue resilience**, particularly given the divergence between the ML model and rule-based scores. The **market value ($800M)** may reflect distressed-asset potential, but operational turnaround viability remains uncertain."
+      ],
+      "llm_report_markdown": "**Preliminary Standing Report: AMC (Fiscal Year 2025)**\n\nAMC\u2019s 2025 financial profile presents a mixed but concerning picture for PE/M&A screening, characterized by weak stability signals, value destruction, and divergent risk assessments. The supervised ML classifier assigns a **12.4% bankruptcy probability**, while the **Altman Z-Score (-1.11)** firmly places the company in the *Distress Zone*, underscoring acute financial stress. However, the **Beneish M-Score (-2.82)** suggests earnings manipulation is unlikely, and the **Piotroski F-Score (3/9, \"Weak\")** reflects operational fragility. The discrepancy between the ML model\u2019s moderate distress signal and the Altman Z-Score\u2019s severe classification warrants closer scrutiny, particularly around liquidity and leverage dynamics.\n\nCore strengths are limited but notable. Despite a **negative net income (-$632M)** and **negative operating cash flow (-$120M)**, AMC\u2019s **DuPont ROE (33.4%)** appears strong, driven by an extreme **equity multiplier (-4.23x)**\u2014a red flag indicating heavy reliance on debt rather than organic profitability. The **gross margin improved (67% vs. 66.7% in 2024)**, and **asset turnover rose (0.60x vs. 0.56x)**, signaling modest operational efficiency gains. However, **ROIC (-1.3%)** significantly trails **WACC (11.9%)**, confirming the company is **destroying economic value**. Cash quality is also a concern, with **free cash flow (-$366M)** and a **declining FCF conversion ratio (57.9%)**, though the **cash conversion ratio (18.9%)** remains moderate.\n\nKey risks dominate the outlook. **Leverage is elevated**, with **total liabilities ($9.9B) exceeding assets ($8.0B)** and **retained earnings deeply negative (-$9.0B)**. The **Piotroski F-Score flags deteriorating liquidity (current ratio decline)**, rising shares outstanding, and persistent losses. While the **Beneish M-Score alleviates earnings manipulation concerns**, the **Altman Z-Score\u2019s distress classification** and **negative economic spread** highlight solvency risks. Further due diligence should prioritize **debt sustainability, cost restructuring, and revenue resilience**, particularly given the divergence between the ML model and rule-based scores. The **market value ($800M)** may reflect distressed-asset potential, but operational turnaround viability remains uncertain."
     },
     {
       "id": "meta",
@@ -1136,10 +1432,10 @@
       "ticker": "V",
       "sector": "Financial Services",
       "fiscal_year": "FY2025",
-      "generated_at": "Aug 17, 2026",
+      "generated_at": "Aug 18, 2026",
       "business_overview": "Visa Inc. operates as a payment technology company in the United States and internationally. The company operates VisaNet, a transaction processing network that enables authorization, clearing, and settlement of payment transactions. It also offers credit, debit, and prepaid card products; tap to pay, tokenization, and click to pay services; Visa Direct, a platform which facilitates money movement, enabling clients to collect, hold, convert, and send funds across its network; and issuing solutions, such as airport lounge access, dining reservations, shopping experiences, event tickets, and seller offers. In addition, the company provides acceptance solutions, an omnichannel payment integration with e-commerce platforms; risk detection and prevention solutions; and advisory and other services comprising consulting practice, proprietary analytics models, data scientists and economists, marketing services, and managed services. It provides its services under the Visa, Visa Electron, V PAY, Interlink, and PLUS brands. The company serves consumers, sellers, financial institutions, and government entities. Visa Inc. was founded in 1958 and is headquartered in San Francisco, California.",
       "rule_based": {
-        "composite_confidence": 58,
+        "composite_confidence": 76,
         "confidence_label": "Medium",
         "metrics": [
           {
@@ -1151,6 +1447,21 @@
             "name": "Altman Z-Score",
             "result": "0.00 (Unknown)",
             "flag": "warn"
+          },
+          {
+            "name": "DuPont ROE",
+            "result": "52.9% (Stable Operating Base)",
+            "flag": "good"
+          },
+          {
+            "name": "ROIC vs WACC",
+            "result": "ROIC 49.0% vs WACC 8.3% (Spread +40.7%)",
+            "flag": "good"
+          },
+          {
+            "name": "Cash Quality",
+            "result": "Strong (FCF Conversion 108%)",
+            "flag": "good"
           },
           {
             "name": "Beneish M-Score",
@@ -1166,46 +1477,89 @@
       },
       "agreement": {
         "status": "divergence",
-        "gap_points": 39,
-        "explanation": "Divergence driven by a 39-point gap between rule-based confidence (58%) and trained model confidence (97%). Analyst review is recommended.",
-        "next_step": "Examine cash flows and capex financing terms in detail."
+        "gap_points": 21,
+        "explanation": "Divergence detected: 21-point gap between rule-based confidence (76%) and trained model confidence (97%). The signals differ primarily due to differing sensitivity to balance sheet ratios. Analyst review is recommended.",
+        "next_step": "Perform line-item cash flow and debt covenant audit."
       },
-      "valuation_standing": "The financial analysis of **V** for 2025 presents a generally stable profile with a low risk of distress but some areas requiring monitoring. The bankruptcy probability model estimates a **3.3% chance of financial distress**, suggesting strong solvency. The **Piotroski F-Score of 6 (\"Moderate\")** indicates decent fundamental health, while the **Beneish M-Score of -2.64** signals that earnings manipulation is unlikely. However, the absence of an **Altman Z-Score** limits a fuller solvency assessment.",
-      "risk_factors": [
-        "The strongest financial signals include **consistent profitability** (net income of $20.",
-        "1B in 2025) and **strong cash flow generation** (operating cash flow of $23.",
-        "1B, exceeding net income)."
-      ],
-      "conclusion": "The strongest financial signals include **consistent profitability** (net income of $20.1B in 2025) and **strong cash flow generation** (operating cash flow of $23.1B, exceeding net income). The company also reduced **long-term debt** (from $20.8B to $19.6B) and avoided share dilution, reinforcing financial discipline. Revenue growth (**11.3% YoY**) and improving asset turnover further highlight operational efficiency.",
-      "raw_altman": {
-        "z_score": 0.0,
-        "classification": "Unknown",
-        "backtracked": false,
-        "data_note": ""
-      },
-      "raw_piotroski": {
-        "score": 6,
-        "classification": "Moderate",
-        "signals": {
-          "positive_net_income": 1,
-          "positive_operating_cash_flow": 1,
-          "improving_roa": 0,
-          "cash_flow_greater_than_net_income": 1,
-          "lower_leverage": 1,
-          "improving_current_ratio": 0,
-          "no_new_shares": 1,
-          "improving_gross_margin": 0,
-          "improving_asset_turnover": 1
+      "valuation_standing": "Company V demonstrates a stable and value-accretive financial profile for 2025, supported by strong profitability, robust cash generation, and consistent returns above its cost of capital. The supervised ML classifier assigns a low bankruptcy probability of 3.3%, while the Piotroski F-Score of 6 (\"Moderate\") reflects solid fundamentals, including positive net income, strong operating cash flow, and disciplined leverage management. Notably, the DuPont ROE breakdown reveals a high-quality return (52.9%), driven by a stable operating base and efficient asset utilization, though profit margins have slightly declined year-over-year. Cash conversion metrics are particularly strong, with a cash conversion ratio of 115% and free cash flow (FCF) conversion of 108%, underscoring the company\u2019s ability to translate revenue into liquidity.",
+      "conclusion": "Core strengths include exceptional value creation, with a return on invested capital (ROIC) of 49.0% significantly outpacing its weighted average cost of capital (WACC) of 8.3%, yielding an economic spread of 40.7%. This spread, classified as \"Strong Value Creation,\" highlights efficient capital deployment. Operating cash flow of $23.1 billion and FCF of $21.6 billion further reinforce financial resilience, while the Beneish M-Score of -2.64 signals no red flags for earnings manipulation. The company\u2019s moderate leverage (equity multiplier of 2.63) and improving asset turnover (up from 0.38 in 2024 to 0.40 in 2025) suggest balanced growth without overreliance on debt.",
+      "raw_details": {
+        "altman": {},
+        "piotroski": {
+          "ticker": "V",
+          "requested_year": 2025,
+          "current_year": 2025,
+          "previous_year": 2024,
+          "backtracked": 0,
+          "data_note": "Calculation uses requested year 2025 and previous year 2024.",
+          "piotroski_score": 6,
+          "classification": "Moderate",
+          "signals": {
+            "positive_net_income": 1,
+            "positive_operating_cash_flow": 1,
+            "improving_roa": 0,
+            "cash_flow_greater_than_net_income": 1,
+            "lower_leverage": 1,
+            "improving_current_ratio": 0,
+            "no_new_shares": 1,
+            "improving_gross_margin": 0,
+            "improving_asset_turnover": 1
+          },
+          "data": {
+            "ticker": {
+              "0": "V",
+              "1": "V"
+            },
+            "year": {
+              "0": 2025,
+              "1": 2024
+            },
+            "statement_date": {
+              "0": "2025-09-30T00:00:00",
+              "1": "2024-09-30T00:00:00"
+            },
+            "net_income": {
+              "0": 20058000000.0,
+              "1": 19743000000.0
+            },
+            "operating_cash_flow": {
+              "0": 23059000000.0,
+              "1": 19950000000.0
+            },
+            "total_assets": {
+              "0": 99627000000.0,
+              "1": 94511000000.0
+            },
+            "current_assets": {
+              "0": 37766000000.0,
+              "1": 34033000000.0
+            },
+            "current_liabilities": {
+              "0": 35048000000.0,
+              "1": 26517000000.0
+            },
+            "long_term_debt": {
+              "0": 19602000000.0,
+              "1": 20836000000.0
+            },
+            "gross_profit": {
+              "0": 32145000000.0,
+              "1": 28884000000.0
+            },
+            "total_revenue": {
+              "0": 40000000000.0,
+              "1": 35926000000.0
+            },
+            "shares_outstanding": {
+              "0": 1925022247.0,
+              "1": 1947440000.0
+            }
+          }
         },
-        "backtracked": false,
-        "data_note": "Calculation uses requested year 2025 and previous year 2024."
-      },
-      "raw_beneish": {
-        "score": -2.635273551688907,
-        "interpretation": "Unlikely to be manipulating earnings",
-        "backtracked": false,
-        "data_note": "Calculation uses requested year 2025 and previous year 2024.",
-        "indices": {
+        "beneish": {
+          "ticker": "V",
+          "current_year": 2025,
+          "previous_year": 2024,
           "DSRI": 0.9368159016393443,
           "GMI": 1.0004491786130918,
           "AQI": 0.9649074634718564,
@@ -1213,15 +1567,95 @@
           "DEPI": 0.9518698243222267,
           "SGAI": 1.0399337787445617,
           "LVGI": 1.0948332369807594,
-          "TATA": -0.03012235638933221
+          "TATA": -0.03012235638933221,
+          "M_score": -2.635273551688907,
+          "interpretation": "Unlikely to be manipulating earnings",
+          "backtracked": 0,
+          "data_note": "Calculation uses requested year 2025 and previous year 2024.",
+          "data": {
+            "ticker": "V",
+            "year": 2024,
+            "statement_date": "2024-09-30T00:00:00",
+            "receivables": 7015000000.0,
+            "revenue": 35926000000.0,
+            "cogs": 7042000000.0,
+            "gross_profit": 28884000000.0,
+            "current_assets": 34033000000.0,
+            "total_assets": 94511000000.0,
+            "ppe": 3824000000.0,
+            "depreciation": 1034000000.0,
+            "operating_expenses": 4827000000.0,
+            "current_liabilities": 26517000000.0,
+            "long_term_debt": 20836000000.0,
+            "net_income": 19743000000.0,
+            "operating_cash_flow": 19950000000.0
+          }
+        },
+        "dupont": {
+          "ticker": "V",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "DuPont calculation uses requested year 2025.",
+          "profit_margin": 0.50145,
+          "asset_turnover": 0.4014975859957642,
+          "equity_multiplier": 2.628056662006384,
+          "roe": 0.5291091825160251,
+          "primary_driver": "Stable Operating Base",
+          "classification": "High Quality / Strong Return",
+          "trend": {
+            "previous_year": 2024,
+            "previous_profit_margin": 0.5495462895952792,
+            "previous_asset_turnover": 0.3801250648072711,
+            "previous_equity_multiplier": 2.4148759485908475,
+            "previous_roe": 0.504458696374275,
+            "roe_change": 0.02465048614175014
+          }
+        },
+        "cash_quality": {
+          "ticker": "V",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "Cash quality calculation uses requested year 2025.",
+          "operating_cash_flow": 23059000000.0,
+          "capital_expenditure": 1482000000.0,
+          "free_cash_flow": 21577000000.0,
+          "cash_conversion_ratio": 1.1496161132715126,
+          "fcf_conversion_ratio": 1.0757303818925117,
+          "fcf_trend": "Improving",
+          "conversion_level": "Strong",
+          "overall_cash_quality": "Strong"
+        },
+        "roic_wacc": {
+          "ticker": "V",
+          "requested_year": 2025,
+          "year": 2025,
+          "backtracked": 0,
+          "data_note": "ROIC/WACC calculation uses requested year 2025.",
+          "nopat": 22326184618.939423,
+          "invested_capital": 45582000000.0,
+          "roic": 0.48980265497212544,
+          "beta": 0.759,
+          "risk_free_rate": 0.0425,
+          "market_risk_premium": 0.055,
+          "cost_of_equity": 0.084245,
+          "pre_tax_cost_of_debt": 0.030047954290378532,
+          "after_tax_cost_of_debt": 0.02526194362511086,
+          "equity_weight": 0.9715737233631258,
+          "debt_weight": 0.028426276636874283,
+          "wacc": 0.08256833132259905,
+          "economic_spread": 0.4072343236495264,
+          "value_creation": "Strong Value Creation"
         }
       },
       "llm_report_paragraphs": [
-        "### **Financial Assessment of V (Requested Year: 2025)**",
-        "The financial analysis of **V** for 2025 presents a generally stable profile with a low risk of distress but some areas requiring monitoring. The bankruptcy probability model estimates a **3.3% chance of financial distress**, suggesting strong solvency. The **Piotroski F-Score of 6 (\"Moderate\")** indicates decent fundamental health, while the **Beneish M-Score of -2.64** signals that earnings manipulation is unlikely. However, the absence of an **Altman Z-Score** limits a fuller solvency assessment.",
-        "The strongest financial signals include **consistent profitability** (net income of $20.1B in 2025) and **strong cash flow generation** (operating cash flow of $23.1B, exceeding net income). The company also reduced **long-term debt** (from $20.8B to $19.6B) and avoided share dilution, reinforcing financial discipline. Revenue growth (**11.3% YoY**) and improving asset turnover further highlight operational efficiency.",
-        "Potential concerns include **rising leverage** (LVGI of 1.09 in the Beneish model) and a **declining current ratio** (current liabilities grew faster than current assets). The Piotroski score\u2019s **mixed signals**\u2014such as stagnant gross margins and return on assets (ROA)\u2014suggest room for operational improvement. While no data backtracking was needed, the lack of an Altman Z-Score leaves a gap in assessing long-term distress risk. Overall, **V appears financially sound but should address liquidity and margin pressures**."
-      ]
+        "**Preliminary Standing Report: Company V (Fiscal Year 2025)**",
+        "Company V demonstrates a stable and value-accretive financial profile for 2025, supported by strong profitability, robust cash generation, and consistent returns above its cost of capital. The supervised ML classifier assigns a low bankruptcy probability of 3.3%, while the Piotroski F-Score of 6 (\"Moderate\") reflects solid fundamentals, including positive net income, strong operating cash flow, and disciplined leverage management. Notably, the DuPont ROE breakdown reveals a high-quality return (52.9%), driven by a stable operating base and efficient asset utilization, though profit margins have slightly declined year-over-year. Cash conversion metrics are particularly strong, with a cash conversion ratio of 115% and free cash flow (FCF) conversion of 108%, underscoring the company\u2019s ability to translate revenue into liquidity.",
+        "Core strengths include exceptional value creation, with a return on invested capital (ROIC) of 49.0% significantly outpacing its weighted average cost of capital (WACC) of 8.3%, yielding an economic spread of 40.7%. This spread, classified as \"Strong Value Creation,\" highlights efficient capital deployment. Operating cash flow of $23.1 billion and FCF of $21.6 billion further reinforce financial resilience, while the Beneish M-Score of -2.64 signals no red flags for earnings manipulation. The company\u2019s moderate leverage (equity multiplier of 2.63) and improving asset turnover (up from 0.38 in 2024 to 0.40 in 2025) suggest balanced growth without overreliance on debt.",
+        "However, areas for deeper due diligence emerge. The Piotroski F-Score\u2019s \"Moderate\" classification stems from stagnant gross margins and a deteriorating current ratio, despite lower long-term debt. The slight decline in ROE (from 50.4% in 2024) and profit margin (from 55.0% to 50.1%) warrants scrutiny of cost pressures or pricing power erosion. While the ML model and rule-based scores align on stability, the absence of an Altman Z-Score limits stress-testing of solvency under adverse scenarios. Additionally, the 11.4% revenue growth outpaced gross profit expansion, indicating potential margin compression. Further investigation into working capital efficiency, capex sustainability, and competitive positioning is recommended to contextualize these trends."
+      ],
+      "llm_report_markdown": "**Preliminary Standing Report: Company V (Fiscal Year 2025)**\n\nCompany V demonstrates a stable and value-accretive financial profile for 2025, supported by strong profitability, robust cash generation, and consistent returns above its cost of capital. The supervised ML classifier assigns a low bankruptcy probability of 3.3%, while the Piotroski F-Score of 6 (\"Moderate\") reflects solid fundamentals, including positive net income, strong operating cash flow, and disciplined leverage management. Notably, the DuPont ROE breakdown reveals a high-quality return (52.9%), driven by a stable operating base and efficient asset utilization, though profit margins have slightly declined year-over-year. Cash conversion metrics are particularly strong, with a cash conversion ratio of 115% and free cash flow (FCF) conversion of 108%, underscoring the company\u2019s ability to translate revenue into liquidity.\n\nCore strengths include exceptional value creation, with a return on invested capital (ROIC) of 49.0% significantly outpacing its weighted average cost of capital (WACC) of 8.3%, yielding an economic spread of 40.7%. This spread, classified as \"Strong Value Creation,\" highlights efficient capital deployment. Operating cash flow of $23.1 billion and FCF of $21.6 billion further reinforce financial resilience, while the Beneish M-Score of -2.64 signals no red flags for earnings manipulation. The company\u2019s moderate leverage (equity multiplier of 2.63) and improving asset turnover (up from 0.38 in 2024 to 0.40 in 2025) suggest balanced growth without overreliance on debt.\n\nHowever, areas for deeper due diligence emerge. The Piotroski F-Score\u2019s \"Moderate\" classification stems from stagnant gross margins and a deteriorating current ratio, despite lower long-term debt. The slight decline in ROE (from 50.4% in 2024) and profit margin (from 55.0% to 50.1%) warrants scrutiny of cost pressures or pricing power erosion. While the ML model and rule-based scores align on stability, the absence of an Altman Z-Score limits stress-testing of solvency under adverse scenarios. Additionally, the 11.4% revenue growth outpaced gross profit expansion, indicating potential margin compression. Further investigation into working capital efficiency, capex sustainability, and competitive positioning is recommended to contextualize these trends."
     },
     {
       "id": "goog",

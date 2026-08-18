@@ -18,8 +18,8 @@ for p in possible_backend_paths:
         load_dotenv(p / ".env")
         break
 
-DATA_PATH = Path(__file__).parent / "data" / "reports.json"
-MOCK_DATA_PATH = Path(__file__).parent / "data" / "mock_reports.json"
+DATA_PATH = Path(__file__).parent / "testdata" / "reports.json"
+MOCK_DATA_PATH = Path(__file__).parent / "testdata" / "mock_reports.json"
 
 LAYOUT_TEMPLATES = {
     "linear": "report_linear.html",
